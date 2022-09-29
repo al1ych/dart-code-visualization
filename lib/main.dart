@@ -15,8 +15,9 @@ void main(List<String> args) {
   // print(jumpToDeclaration);
   for (var p in jumpToDeclaration.entries) {
     if (p.value != null) {
-      print("${p.key} declared at ${p.value.offset}");
-      // print("${p.key}:${p.key.runtimeType} declared at ${p.value.offset}");
+      // print("${p.key} declared at ${p.value.offset}");
+      print("${p.key}:${p.key.runtimeType}:${p.key.offset} -> "
+          "${p.value}:${p.value.runtimeType}:${p.value.offset} ");
     }
   }
 }

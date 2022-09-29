@@ -26,4 +26,9 @@ const srcSample2 = """
     }           // if stmt
     print(y);
   }
+  
+  void main() {
+    int b = 10;
+    f(b);
+  }
 """;
