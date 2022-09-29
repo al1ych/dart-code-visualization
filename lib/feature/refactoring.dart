@@ -21,9 +21,6 @@ String _wrapUsagesWithLinkToDeclaration(
   String generateOnClick(toWhere) {
     return "onclick='console.log($toWhere)'";
   }
-  String postProcess(String s) {
-    return s.replaceAll("\n", "<br/>\n");
-  }
 
   int declOffset = _getRootDeclaration(usages[0]).offset;
   String newCode = "${codeString.substring(0, usages[0].offset)}"
@@ -40,7 +37,7 @@ String _wrapUsagesWithLinkToDeclaration(
     newCode += codeString.substring(from, to) + newValue;
   }
   newCode += codeString.substring(usages.last.offset + usages.last.length);
-  newCode = postProcess(newCode);
+  newCode = newCode.replaceAll("\n", "<br/>\n");
   return newCode;
 }
 
@@ -53,4 +50,8 @@ String wrapNodesWithLinkToDeclaration(String codeString, List<AstNode> nodes) {
   usages.sort((a, b) => a.offset - b.offset); // sort by offset
   usages = usages.toSet().toList(); // remove duplicates
   return _wrapUsagesWithLinkToDeclaration(codeString, usages);
+}
+
+String generateHTML(String codeString, List<AstNode> usages) {
+  return wrapNodesWithLinkToDeclaration(codeString, usages);
 }

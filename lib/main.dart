@@ -12,7 +12,8 @@ part 'feature/name_resolution.dart';
 part 'feature/refactoring.dart';
 
 void main(List<String> args) {
-  File codeFile = File('test/program_2.dart');
+  String filename = 'program_2';
+  File codeFile = File('test/$filename.dart');
   String codeString = codeFile.readAsStringSync();
 
   var res = parseString(content: codeString);
@@ -38,5 +39,16 @@ void main(List<String> args) {
     }
   }
 
-  print(wrapNodesWithLinkToDeclaration(codeString, varUsages));
+  print("Generating HTML from code source...");
+  var genHtml = generateHTML(codeString, varUsages);
+  final outPath = "build/html/${filename}_dartboard.html";
+  print("Dumping HTML into file...");
+  File outFile = File(outPath);
+  outFile.writeAsStringSync(genHtml);
+  print("Success! Access HTML here: $outPath.");
+  print("Automatically opening the HTML...");
+  Process.run('open', [outPath]).then((result) {
+    stdout.write(result.stdout);
+    stderr.write(result.stderr);
+  });
 }
