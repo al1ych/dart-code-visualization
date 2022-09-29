@@ -4,7 +4,6 @@ import 'dart:io';
 
 import 'package:analyzer/dart/analysis/utilities.dart';
 import 'package:analyzer/dart/ast/ast.dart';
-import 'package:analyzer/dart/ast/token.dart';
 import 'package:analyzer/dart/ast/visitor.dart';
 
 part 'feature/name_resolution.dart';
@@ -48,6 +47,7 @@ void main(List<String> args) {
   print("Success! Access HTML here: $outPath.");
   print("Automatically opening the HTML...");
   Process.run('open', [outPath]).then((result) {
+    // probably macos only
     stdout.write(result.stdout);
     stderr.write(result.stderr);
   });
