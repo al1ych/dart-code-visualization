@@ -27,10 +27,10 @@ void main(List<String> args) {
       varUsages.add(p.key);
       // print("${p.key} declared at ${p.value.offset}");
       // if (p.key.name == 'x') {
-        // todo node replacer ?
-        // String newCode = wrapWithTag(codeString, p.key, '<tag>');
-        // print(newCode);
-        // break;
+      // todo node replacer ?
+      // String newCode = wrapWithTag(codeString, p.key, '<tag>');
+      // print(newCode);
+      // break;
       // }
 
       // print("${p.key}:${p.key.runtimeType}:${p.key.offset} -> "
@@ -38,5 +38,5 @@ void main(List<String> args) {
     }
   }
 
-  print(wrapNodesWithTag(codeString, varUsages, "tag"));
+  print(wrapNodesWithLinkToDeclaration(codeString, varUsages));
 }

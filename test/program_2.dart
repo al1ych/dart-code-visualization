@@ -1,16 +1,16 @@
 void f(int a) {
-  int x = 5;   // decl
-  a = x;       // ass
-  { }          // empty block
-  int y = 1;   // decl
-  if (true) {  // if stmt
-    int y;     // decl
-    y = 7;     // ass
-  }            // if stmt
-  print(y);    // usage
+  int x = 5;
+  a = x;
+  {}
+  int y = 1;
+  if (true) {
+    int y;
+    y = 7;
+  }
+  print(y);
 }
 
 void main() {
-  int b = 10;  // decl
-  f(b);        // usage
+  int b = 10;
+  f(b);
 }
