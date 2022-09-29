@@ -1,6 +1,5 @@
 // @dart=2.9
-
-part of 'main.dart';
+// deprecated
 
 const srcSample1 = """
   void main() {
@@ -11,8 +10,6 @@ const srcSample1 = """
     }
   }
 """;
-
-// stack: block_func decl_x decl_y block_if decl_y
 
 const srcSample2 = """
   void f(int a) {
