@@ -1,12 +1,6 @@
 # DartBoard
 
-(вариант лого №1)
-
 ![img_2.png](img_2.png)
-
-(вариант лого №2)
-
-![img_1.png](img_1.png)
 
 DartBoard is a cross-platform code visualization tool.
 It has most of the benefits of the modern IDEs, **but**
