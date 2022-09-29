@@ -38,5 +38,5 @@ void main(List<String> args) {
     }
   }
 
-  print(wrapAllWithTag(codeString, varUsages, "tag"));
+  print(wrapNodesWithTag(codeString, varUsages, "tag"));
 }
