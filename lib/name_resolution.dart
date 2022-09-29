@@ -21,7 +21,7 @@ class VarNameResolveVisitor extends RecursiveAstVisitor {
           return decl;
         }
       } else if (contextStack[i] is SimpleFormalParameter) {
-        SimpleFormalParameter decl = contextStack[i];  // down-casting
+        SimpleFormalParameter decl = contextStack[i]; // down-casting
         SimpleIdentifier declId = decl.identifier;
         if (declId.name == idNode.name) {
           return decl;
@@ -52,11 +52,12 @@ class VarNameResolveVisitor extends RecursiveAstVisitor {
 
   @override
   void visitBlock(Block block) {
-    contextStack.add(block);                            // open block
-
-    block.visitChildren(this);                          // down the tree
-
-    while (contextStack.last.offset != block.offset) {  // close block
+    // open block
+    contextStack.add(block);
+    // proceed down the tree
+    block.visitChildren(this);
+    // close block
+    while (contextStack.last.offset != block.offset) {
       contextStack.removeLast();
     }
     contextStack.removeLast();

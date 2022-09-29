@@ -5,8 +5,8 @@ import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/ast/visitor.dart';
 
 part 'sources.dart';
-part 'name_resolution.dart';
 
+part 'name_resolution.dart';
 
 void main(List<String> args) {
   var res = parseString(content: srcSample2);
