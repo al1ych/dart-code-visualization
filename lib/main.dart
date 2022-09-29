@@ -7,7 +7,7 @@ import 'package:analyzer/dart/ast/visitor.dart';
 part 'sources.dart';
 
 List<AstNode> contextStack = [];
-Map<SimpleIdentifier, VariableDeclaration> jumpToDeclaration = {};
+Map<SimpleIdentifier, AstNode> jumpToDeclaration = {};
 
 class VarNameResolveVisitor extends RecursiveAstVisitor {
   VarNameResolveVisitor({
@@ -16,22 +16,34 @@ class VarNameResolveVisitor extends RecursiveAstVisitor {
 
   void Function(VariableDeclaration node) onVisitVariableDeclaration;
 
-  VariableDeclaration _traceBackToDeclaration(SimpleIdentifier idNode) {
+  AstNode _findDeclaration(SimpleIdentifier idNode) {
     for (int i = contextStack.length - 1; i >= 0; i--) {
       if (contextStack[i] is VariableDeclaration) {
-        final VariableDeclaration decl = contextStack[i]; // down-casting
-        final SimpleIdentifier declId = decl.name;
+        VariableDeclaration decl = contextStack[i]; // down-casting
+        SimpleIdentifier declId = decl.name;
         if (declId.name == idNode.name) {
-          print("for ${idNode.name} found decl at ${decl.offset}");
+          return decl;
+        }
+      } else if (contextStack[i] is SimpleFormalParameter) {
+        SimpleFormalParameter decl = contextStack[i];  // down-casting
+        SimpleIdentifier declId = decl.identifier;
+        if (declId.name == idNode.name) {
           return decl;
         }
       }
     }
+    return null;
+  }
+
+  @override
+  visitSimpleFormalParameter(SimpleFormalParameter node) {
+    contextStack.add(node);
+    return super.visitSimpleFormalParameter(node);
   }
 
   @override
   void visitSimpleIdentifier(SimpleIdentifier node) {
-    final decl = _traceBackToDeclaration(node);
+    AstNode decl = _findDeclaration(node);
     jumpToDeclaration[node] = decl;
     super.visitSimpleIdentifier(node);
   }
@@ -44,12 +56,11 @@ class VarNameResolveVisitor extends RecursiveAstVisitor {
 
   @override
   void visitBlock(Block block) {
-    contextStack.add(block); // open block
+    contextStack.add(block);                            // open block
 
-    block.visitChildren(this); // down the tree
+    block.visitChildren(this);                          // down the tree
 
-    while (contextStack.last.offset != block.offset) {
-      // close block
+    while (contextStack.last.offset != block.offset) {  // close block
       contextStack.removeLast();
     }
     contextStack.removeLast();
@@ -60,13 +71,8 @@ bindVars(AstNode root) {}
 
 resolveNames(AstNode root) {
   root.visitChildren(
-    VarNameResolveVisitor(
-      onVisitVariableDeclaration: (node) {
-        // print("ast node visited: ${node.name}");
-      },
-    ),
+    VarNameResolveVisitor(),
   );
-  // print("context stack: $contextStack");
   // bindVars(root);
 }
 
@@ -74,10 +80,10 @@ void main(List<String> args) {
   var res = parseString(content: srcSample2);
   var root = res.unit.root;
   resolveNames(root);
-  // print(jumpToDeclaration);
+  print(jumpToDeclaration);
   for (var p in jumpToDeclaration.entries) {
     if (p.value != null) {
-      print("${p.key} declared at ${p.value.offset}");
+      print("${p.key}:${p.key.runtimeType} declared at ${p.value.offset}");
     }
   }
 }
