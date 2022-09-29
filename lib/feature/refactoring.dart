@@ -10,22 +10,37 @@ AstNode _getRootDeclaration(AstNode node) {
   return node;
 }
 
-String _replace(String code, AstNode node, String s) {
-  AstNode dRoot = _getRootDeclaration(node);
-  List<SimpleIdentifier> usages = jumpToUsages[dRoot];
-  // usages.sort((a, b) => a.offset - b.offset); // todo нужно ли сортить?
-  String newCode = code.substring(0, usages[0].offset) + s;
+String _replace(String code, List<SimpleIdentifier> usages, String tag) {
+  final openTag = "<$tag>";
+  final closeTag = "</$tag>";
+  String newCode =
+      code.substring(0, usages[0].offset) + openTag + usages[0].name + closeTag;
   for (int i = 1; i < usages.length; i++) {
-    var u0 = usages[i - 1];
-    var u1 = usages[i];
-    newCode += code.substring(u0.offset + u0.length, u1.offset) + s;
+    final from = usages[i - 1].offset + usages[i - 1].length;
+    final to = usages[i].offset;
+    final newValue = openTag + usages[i].name + closeTag;
+    newCode += code.substring(from, to) + newValue;
   }
   newCode += code.substring(usages.last.offset + usages.last.length);
   return newCode;
 }
 
-String wrapWithTag(String codeString, AstNode node, String tag) {
-  return _replace(codeString, node, tag + node.toString() + tag);
+String wrapAllWithTag(String codeString, List<AstNode> nodes, String tag) {
+  List<SimpleIdentifier> usages = [];
+  for (var node in nodes) {
+    AstNode dRoot = _getRootDeclaration(node);
+    usages.addAll(jumpToUsages[dRoot]);
+  }
+  usages.sort((a, b) => a.offset - b.offset); // sort by offset
+  usages = usages.toSet().toList(); // remove duplicates
+  return _replace(codeString, usages, tag);
+}
+
+String wrapOneWithTag(String codeString, AstNode node, String tag) {
+  AstNode dRoot = _getRootDeclaration(node);
+  List<SimpleIdentifier> usages = jumpToUsages[dRoot];
+  // usages.sort((a, b) => a.offset - b.offset); // todo нужно ли сортить?
+  return _replace(codeString, usages, tag);
 }
 
 /*
