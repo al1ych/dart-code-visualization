@@ -12,14 +12,18 @@ const srcSample1 = """
   }
 """;
 
+// stack: block_func decl_x decl_y block_if decl_y
+
 const srcSample2 = """
   void f(int a) {
-    int x;
-    a = x;
-    int y;
-    if (true) {
-      int y;
-      y = 7;
-    }
+    int x;      // decl
+    a = x;      // ass
+    {}
+    int y;      // decl
+    if (true) { // if stmt
+      int y;    // decl
+      y = 7;    // ass
+    }           // if stmt
+    print(y);
   }
 """;
