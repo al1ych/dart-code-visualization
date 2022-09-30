@@ -3,7 +3,8 @@
 part of '../../main.dart';
 
 String get staticHTMLTemplate {
-  File staticTemplateFile = File("lib/feature/html_generation/static_template.html");
+  File staticTemplateFile =
+      File("lib/feature/html_generation/static_template.html");
   String staticTemplateContent = staticTemplateFile.readAsStringSync();
   return staticTemplateContent;
 }
@@ -59,8 +60,9 @@ String bindToDeclaration(String codeString, List<AstNode> nodes) {
 String generateHTML(String codeString, List<AstNode> usages) {
   /** html generation pipeline */
   codeString = bindToDeclaration(codeString, usages);
-  codeString = codeString.replaceAll("\n", "<br/>\n");
-  codeString = codeString.replaceAll("  ", "&nbsp;&nbsp;");
-  codeString = "$staticHTMLTemplate <code> $codeString </code>";
+  // codeString = codeString.replaceAll("\n", "<br/>\n");
+  // codeString = codeString.replaceAll("  ", "&nbsp;&nbsp;");
+  codeString = "$staticHTMLTemplate"
+      "<pre><code>$codeString</code></pre>";
   return codeString;
 }
