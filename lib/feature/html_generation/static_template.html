@@ -17,7 +17,22 @@
         padding: 2px;
         font-size: 105%;
     }
+
+    .declaration-highlighted {
+        background-color: #5e9efc;
+        color: white;
+    }
 </style>
+
+<script>
+    function jumpTo(whereTo) {
+        console.log(`Jumping to ${whereTo}`)
+        document.getElementById(whereTo).classList.add("declaration-highlighted")
+        setTimeout(() => {
+            document.getElementById(whereTo).classList.remove("declaration-highlighted")
+        }, 2000)
+    }
+</script>
 
 <img width="32" height="32"
      src="https://github.com/al1ych/dart-code-visualization/raw/master/logo.png"/><br/>

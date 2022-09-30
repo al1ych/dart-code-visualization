@@ -21,9 +21,9 @@ String _bindToDeclaration(String codeString, List<SimpleIdentifier> usages) {
     return codeString;
   }
 
-  // snippet to generate onclick handlers
   String generateOnClick(toWhere) {
-    return "onclick='console.log($toWhere)'";
+    // snippet to generate onclick handlers
+    return "onclick='jumpTo($toWhere)'";
   }
 
   int declOffset = _getRootDeclaration(usages[0]).offset;
