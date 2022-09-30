@@ -1,6 +1,6 @@
 # DartBoard
 
-![img_2.png](img_2.png)
+![img_2.png](logo.png)
 
 DartBoard is a cross-platform code visualization tool.
 It has most of the benefits of the modern IDEs, **but**

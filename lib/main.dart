@@ -8,7 +8,7 @@ import 'package:analyzer/dart/ast/visitor.dart';
 
 part 'feature/name_resolution.dart';
 
-part 'feature/refactoring.dart';
+part 'feature/html_generation/html_generation.dart';
 
 void main(List<String> args) {
   String filename = 'program_2';
