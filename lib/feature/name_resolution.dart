@@ -2,9 +2,15 @@
 
 part of '../main.dart';
 
-List<AstNode> contextStack                        = [];
-Map<SimpleIdentifier, AstNode> jumpToDeclaration  = {};
+List<AstNode> contextStack = [];
+Map<SimpleIdentifier, AstNode> jumpToDeclaration = {};
 Map<AstNode, List<SimpleIdentifier>> jumpToUsages = {};
+
+void _clearAnalysisState() {
+  contextStack = [];
+  jumpToDeclaration = {};
+  jumpToUsages = {};
+}
 
 void _connectUsageWithDeclaration(AstNode usage, AstNode decl) {
   jumpToDeclaration[usage] = decl;
@@ -17,25 +23,35 @@ void _connectUsageWithDeclaration(AstNode usage, AstNode decl) {
 AstNode _findDeclaration(SimpleIdentifier idNode) {
   for (int i = contextStack.length - 1; i >= 0; i--) {
     if (contextStack[i] is VariableDeclaration) {
-      VariableDeclaration decl  = contextStack[i];    // down-casting
-      SimpleIdentifier declId   = decl.name;
+      VariableDeclaration decl = contextStack[i]; // down-casting
+      SimpleIdentifier declId = decl.name;
       if (declId.name == idNode.name) {
         return declId;
       }
     } else if (contextStack[i] is SimpleFormalParameter) {
-      SimpleFormalParameter decl  = contextStack[i];  // down-casting
-      SimpleIdentifier declId     = decl.identifier;
+      SimpleFormalParameter decl = contextStack[i]; // down-casting
+      SimpleIdentifier declId = decl.identifier;
       if (declId.name == idNode.name) {
         return declId;
       }
     } else if (contextStack[i] is SimpleIdentifier) {
-      SimpleIdentifier declId = contextStack[i];      // down-casting
+      SimpleIdentifier declId = contextStack[i]; // down-casting
       if (declId.name == idNode.name) {
         return declId;
       }
     }
   }
   return null;
+}
+
+List<AstNode> get allVarUsages {
+  List<AstNode> varUsages = [];
+  for (var p in jumpToDeclaration.entries) {
+    if (p.value != null) {
+      varUsages.add(p.key);
+    }
+  }
+  return varUsages;
 }
 
 class VarNameResolveVisitor extends RecursiveAstVisitor {
@@ -74,7 +90,6 @@ class VarNameResolveVisitor extends RecursiveAstVisitor {
 }
 
 resolveNames(AstNode root) {
-  root.visitChildren(
-    VarNameResolveVisitor(),
-  );
+  _clearAnalysisState();
+  root.visitChildren(VarNameResolveVisitor());
 }

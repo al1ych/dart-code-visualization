@@ -57,7 +57,7 @@ String bindToDeclaration(String codeString, List<AstNode> nodes) {
 }
 
 String generateHTML(String codeString, List<AstNode> usages) {
-  // html generation pipeline
+  /** html generation pipeline */
   codeString = bindToDeclaration(codeString, usages);
   codeString = codeString.replaceAll("\n", "<br/>\n");
   codeString = codeString.replaceAll("  ", "&nbsp;&nbsp;");

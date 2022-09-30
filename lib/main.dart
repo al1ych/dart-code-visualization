@@ -20,26 +20,8 @@ void main(List<String> args) {
 
   resolveNames(root);
 
-  // print(jumpToDeclaration);
-  List<AstNode> varUsages = [];
-  for (var p in jumpToDeclaration.entries) {
-    if (p.value != null) {
-      varUsages.add(p.key);
-      // print("${p.key} declared at ${p.value.offset}");
-      // if (p.key.name == 'x') {
-      // todo node replacer ?
-      // String newCode = wrapWithTag(codeString, p.key, '<tag>');
-      // print(newCode);
-      // break;
-      // }
-
-      // print("${p.key}:${p.key.runtimeType}:${p.key.offset} -> "
-      //     "${p.value}:${p.value.runtimeType}:${p.value.offset} ");
-    }
-  }
-
   print("Generating HTML from code source...");
-  var genHtml = generateHTML(codeString, varUsages);
+  var genHtml = generateHTML(codeString, allVarUsages);
   final outPath = "build/html/${filename}_dartboard.html";
   print("Dumping HTML into file...");
   File outFile = File(outPath);
