@@ -17,6 +17,7 @@ AstNode _getRootDeclaration(AstNode node) {
   return node;
 }
 
+// todo идти с конца
 String _bindToDeclaration(String codeString, List<SimpleIdentifier> usages) {
   if (usages.isEmpty) {
     return codeString;
