@@ -15,7 +15,7 @@ part 'feature/name_resolution.dart';
 part 'feature/html_generation/html_generation.dart';
 
 void main(List<String> args) {
-  String filename = 'program_2';
+  String filename = 'program_long';
   File codeFile = File('test/$filename.dart');
   String codeString = codeFile.readAsStringSync();
 

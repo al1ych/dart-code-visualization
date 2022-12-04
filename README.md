@@ -30,7 +30,7 @@ This is how it works:
 
 - [ ] Theming
 - [ ] Search by regex expression
-- [ ] Replace by regex expression
+- [ ] Replace by regex expression (?)
 - [ ] Rename var/function (refactor)
 - [ ] Upload zip project
 - [ ] Upload via github repo

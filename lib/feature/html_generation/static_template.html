@@ -57,6 +57,7 @@
     function jumpTo(whereTo) {
         console.log(`Jumping to ${whereTo}`)
         document.getElementById(whereTo).classList.add("declaration-highlighted")
+        window.location.hash = whereTo;
         setTimeout(() => {
             document.getElementById(whereTo).classList.remove("declaration-highlighted")
         }, 3000)
