@@ -17,9 +17,9 @@ This is how it works:
 
 ### High priority
 
-- [ ] Generate HTML files from source code in Dart
+- [x] Generate HTML files from source code in Dart
 - [x] Highlight syntax in the generated HTML
-- [ ] Jump to declaration for a variable
+- [x] Jump to declaration for a variable
 - [ ] Jump to declaration for a function
 - [ ] Show documentation on cursor hover
 - [ ] 👉🏻 Collapse block scopes
