@@ -18,11 +18,11 @@ This is how it works:
 ### High priority
 
 - [ ] Generate HTML files from source code in Dart
-- [ ] Highlight syntax in the generated HTML
+- [ ] 👉🏻 Highlight syntax in the generated HTML
 - [ ] Jump to declaration for a variable
 - [ ] Jump to declaration for a function
 - [ ] Show documentation on cursor hover
-- [ ] Collapse block scopes
+- [ ] 👉🏻 Collapse block scopes
 - [ ] Upper tab bar to switch between tabs with source files
 - [ ] Project tree
 

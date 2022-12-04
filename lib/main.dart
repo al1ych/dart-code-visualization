@@ -1,10 +1,14 @@
 // @dart=2.9
 
+import 'dart:collection';
 import 'dart:io';
+// import 'package:flutter/material.dart';
 
 import 'package:analyzer/dart/analysis/utilities.dart';
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/ast/visitor.dart';
+
+part 'feature/syntax_highlighting/syntax_highlighting.dart';
 
 part 'feature/name_resolution.dart';
 
@@ -23,7 +27,7 @@ void main(List<String> args) {
   print("Generating HTML from code source...");
   var genHtml = generateHTML(codeString, allVarUsages);
   final outPath = "build/html/${filename}_dartboard.html";
-  print("Dumping HTML into file...");
+  print("Dumping HTML into files...");
   File outFile = File(outPath);
   outFile.writeAsStringSync(genHtml);
   print("Success! Access HTML here: $outPath.");

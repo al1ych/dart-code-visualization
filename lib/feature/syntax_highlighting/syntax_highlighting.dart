@@ -1,13 +1,14 @@
-import 'package:flutter/material.dart';
+// @dart=2.9
+
+part of '../../main.dart';
 
 class SyntaxHighlighting {
-  static const List<String> operators = [
+  static const List<String> keywords = [
     "abstract",
     "else",
     "import",
     "super",
     "as",
-    "enum",
     "in",
     "switch",
     "assert",
@@ -34,14 +35,9 @@ class SyntaxHighlighting {
     "false",
     "null",
     "typedef",
-    "class",
-    "final",
     "on1",
-    "var",
-    "const",
     "finally",
     "operator",
-    "void",
     "continue",
     "for",
     "part",
@@ -60,19 +56,29 @@ class SyntaxHighlighting {
     "do",
     "if",
     "show",
-    "dynamic",
     "implements",
     "static",
   ];
 
+  static const List<String> dataTypes = [
+    "void",
+    "int",
+    "String",
+    "dynamic",
+    "enum",
+    "final",
+    "var",
+    "const",
+    "Map",
+    "Set",
+  ];
+
   static get codePatterns => {
-        RegExp(r"\bmain\b"): Colors.deepPurpleAccent,
-        RegExp(r'\".*\"'): Colors.deepPurpleAccent,
-        RegExp(r'>.*'): Colors.red,
-        RegExp(r"\B#[a-zA-Z0-9]+\b"): Colors.red,
-        RegExp(r";.*"): Colors.green,
-        RegExp(r"\("): Colors.blue,
-        RegExp(r"\)"): Colors.blue,
-        RegExp(r"\b(" + operators.join("|") + r")\b"): Colors.deepOrange,
+        RegExp(r"\bmain\b"): "main",
+        RegExp(r'\".*\"'): "quote",
+        RegExp(r"\B#[a-zA-Z0-9]+\b"): "literal",
+        RegExp(r";.*"): "semicolon",
+        RegExp(r"\b(" + keywords.join("|") + r")\b"): "keyword",
+        RegExp(r"\b(" + dataTypes.join("|") + r")\b"): "data-type",
       };
 }

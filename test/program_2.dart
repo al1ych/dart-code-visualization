@@ -9,6 +9,11 @@ void f(int a) {
     int y;
     y = 7;
   }
+  for (int i = 0; i < 10; i++) {
+    while (false) {
+      // ...
+    }
+  }
   print(y);
   x *= 2;
 }
