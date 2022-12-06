@@ -1,8 +1,9 @@
 // @dart=2.9
 
-part of '../main.dart';
+part of '../../main.dart';
 
 List<AstNode> contextStack = [];
+List<AstNode> blocks = [];
 Map<SimpleIdentifier, AstNode> jumpToDeclaration = {};
 Map<AstNode, List<SimpleIdentifier>> jumpToUsages = {};
 
@@ -79,6 +80,7 @@ class VarNameResolveVisitor extends RecursiveAstVisitor {
   void visitBlock(Block block) {
     // open block
     contextStack.add(block);
+    blocks.add(block);
     // proceed down the tree
     block.visitChildren(this);
     // close block
@@ -88,6 +90,22 @@ class VarNameResolveVisitor extends RecursiveAstVisitor {
     contextStack.removeLast();
   }
 }
+
+// class BlockVisitor extends RecursiveAstVisitor {
+//   @override
+//   void visitBlock(Block block) {
+//     // open block
+//     contextStack.add(block);
+//     blocks.add(block);
+//     // proceed down the tree
+//     block.visitChildren(this);
+//     // close block
+//     while (contextStack.last.offset != block.offset) {
+//       contextStack.removeLast();
+//     }
+//     contextStack.removeLast();
+//   }
+// }
 
 resolveNames(AstNode root) {
   _clearAnalysisState();

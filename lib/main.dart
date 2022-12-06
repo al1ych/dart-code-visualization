@@ -1,6 +1,7 @@
 // @dart=2.9
 
 import 'dart:collection';
+import 'dart:developer';
 import 'dart:io';
 // import 'package:flutter/material.dart';
 
@@ -10,19 +11,25 @@ import 'package:analyzer/dart/ast/visitor.dart';
 
 part 'feature/syntax_highlighting/syntax_highlighting.dart';
 
-part 'feature/name_resolution.dart';
+part 'feature/name_resolution/name_resolution.dart';
 
 part 'feature/html_generation/html_generation.dart';
+// part 'feature/block_collapsing/block_collapsing.dart';
 
 void main(List<String> args) {
-  String filename = 'program_long';
+  String filename = 'program_3';
   File codeFile = File('test/$filename.dart');
   String codeString = codeFile.readAsStringSync();
 
   var res = parseString(content: codeString);
   var root = res.unit.root;
 
-  resolveNames(root);
+  resolveNames(root); // ast walking
+
+  print("Blocks:");
+  for (int i = 0; i < blocks.length; i++) {
+    print("${blocks[i]} +++++ ${blocks[i].offset} + ${blocks[i].length}");
+  }
 
   print("Generating HTML from code source...");
   var genHtml = generateHTML(codeString, allVarUsages);
