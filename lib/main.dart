@@ -14,10 +14,15 @@ part 'feature/syntax_highlighting/syntax_highlighting.dart';
 part 'feature/name_resolution/name_resolution.dart';
 
 part 'feature/html_generation/html_generation.dart';
-// part 'feature/block_collapsing/block_collapsing.dart';
+
+part 'feature/html_generation/block_collapsers.dart';
+
+part 'feature/html_generation/var_binding.dart';
+
+part 'feature/html_generation/syntax_highlighting.dart';
 
 void main(List<String> args) {
-  String filename = 'program_3';
+  String filename = 'program_2';
   File codeFile = File('test/$filename.dart');
   String codeString = codeFile.readAsStringSync();
 
