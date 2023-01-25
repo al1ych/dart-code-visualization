@@ -26,8 +26,8 @@ String pipeline(
     return codeString;
   }
   String processedCode = codeString;
-  processedCode = addBlockCollapsers(processedCode, blocks);
-  // processedCode = addDeclarationBinding(processedCode, usages);
+  // processedCode = addBlockCollapsers(processedCode, blocks);
+  processedCode = addDeclarationBinding(processedCode, usages);
   processedCode = addSimpleSyntaxHighlighting(processedCode);
   return processedCode;
 }

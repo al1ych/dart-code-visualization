@@ -22,7 +22,7 @@ part 'feature/html_generation/var_binding.dart';
 part 'feature/html_generation/syntax_highlighting.dart';
 
 void main(List<String> args) {
-  String filename = 'program_2';
+  String filename = 'program_long';
   File codeFile = File('test/$filename.dart');
   String codeString = codeFile.readAsStringSync();
 
