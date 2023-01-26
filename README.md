@@ -25,6 +25,7 @@ This is how it works:
 - [ ] 👉🏻 Collapse block scopes
 - [ ] Upper tab bar to switch between tabs with source files
 - [ ] Project tree
+- [ ] 👉🏻 Work with all the source files in the input project
 
 ### Medium priority
 

@@ -22,31 +22,36 @@ part 'feature/html_generation/var_binding.dart';
 part 'feature/html_generation/syntax_highlighting.dart';
 
 void main(List<String> args) {
-  String filename = 'program_long';
-  File codeFile = File('test/$filename.dart');
-  String codeString = codeFile.readAsStringSync();
+  var sources = ['project_1/main', 'project_1/functions'];
 
-  var res = parseString(content: codeString);
-  var root = res.unit.root;
+  for (int i = 0; i < sources.length; i++) {
+    String filename = sources[i];
 
-  resolveNames(root); // ast walking
+    File codeFile = File('test/$filename.dart');
+    String codeString = codeFile.readAsStringSync();
 
-  print("Blocks:");
-  for (int i = 0; i < blocks.length; i++) {
-    print("${blocks[i]} +++++ ${blocks[i].offset} + ${blocks[i].length}");
+    var res = parseString(content: codeString);
+    var root = res.unit.root;
+
+    resolveNames(root); // ast walking
+
+    print("Blocks:");
+    for (int i = 0; i < blocks.length; i++) {
+      print("${blocks[i]} +++++ ${blocks[i].offset} + ${blocks[i].length}");
+    }
+
+    print("Generating HTML from code source...");
+    var genHtml = generateHTML(codeString, allVarUsages);
+    final outPath = "build/html/${filename}_dartboard.html";
+    print("Dumping HTML into files...");
+    File outFile = File(outPath);
+    outFile.writeAsStringSync(genHtml);
+    print("Success! Access HTML here: $outPath.");
+    print("Automatically opening the HTML...");
+    Process.run('open', [outPath]).then((result) {
+      // probably macos only
+      stdout.write(result.stdout);
+      stderr.write(result.stderr);
+    });
   }
-
-  print("Generating HTML from code source...");
-  var genHtml = generateHTML(codeString, allVarUsages);
-  final outPath = "build/html/${filename}_dartboard.html";
-  print("Dumping HTML into files...");
-  File outFile = File(outPath);
-  outFile.writeAsStringSync(genHtml);
-  print("Success! Access HTML here: $outPath.");
-  print("Automatically opening the HTML...");
-  Process.run('open', [outPath]).then((result) {
-    // probably macos only
-    stdout.write(result.stdout);
-    stderr.write(result.stderr);
-  });
 }
