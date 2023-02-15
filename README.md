@@ -1,6 +1,6 @@
 # DartBoard
 
-![img_2.png](logo.png)
+![img_2.png](logo_trans.png)
 
 DartBoard is a cross-platform code visualization tool.
 It has most of the benefits of the modern IDEs, **but**
@@ -24,15 +24,13 @@ This is how it works:
 - [ ] Show documentation on cursor hover
 - [ ] 👉🏻 Collapse block scopes
 - [ ] Upper tab bar to switch between tabs with source files
-- [ ] Project tree
+- [x] 👉🏻 Project tree
 - [ ] 👉🏻 Work with all the source files in the input project
 
 ### Medium priority
 
 - [ ] Theming
 - [ ] Search by regex expression
-- [ ] Replace by regex expression (?)
-- [ ] Rename var/function (refactor)
 - [ ] Upload zip project
 - [ ] Upload via github repo
 - [ ] Project tree folder collapsing
@@ -55,6 +53,8 @@ This is how it works:
 - [ ] Visualize dependency graph
 - [ ] Visualize inheritance tree
 - [ ] Pipelines.
+- [ ] Rename var/function (refactor)
+- [ ] Replace by regex expression (?)
   Use-case 1: automatically send the generated HTML to the code reviewer.
   Use-case 2: automatically host the result on Heroku or other hosting provider and share the link.
 - [ ] Github Action. Use-case: automate generating the HTML alongside the documentation pipelines,
