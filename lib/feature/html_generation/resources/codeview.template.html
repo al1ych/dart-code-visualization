@@ -1,17 +1,20 @@
-<!DOCTYPE html>
-<head>
-    <meta charset="UTF-8">
-    <title>program_title : DartBoard</title>
-    <link rel="shortcut icon" type="image/png"
-          href="https://github.com/al1ych/dart-code-visualization/raw/master/logo.png"/>
-</head>
-
 <style>
     * {
         background-color: white;
         color: #252525;
         scroll-behavior: smooth;
         scroll-padding-top: 5.5em;
+        margin-top: 10px;
+        animation: fade-in 0.2s ease-in-out;
+    }
+
+    @keyframes fade-in {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
     }
 
     code {
@@ -113,8 +116,7 @@
             _initiateCooldown(blockId)
         }
     }
+
 </script>
 
-<img width="32" height="32"
-     src="https://github.com/al1ych/dart-code-visualization/raw/master/logo.png"/><br/>
-<hr/><br/>
+<!-- <pre><code>$codeString</code></pre> -->

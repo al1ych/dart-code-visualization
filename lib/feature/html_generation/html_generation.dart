@@ -1,10 +1,29 @@
 // @dart=2.9
 
+// ignore_for_file: avoid_print
+
 part of '../../main.dart';
 
-String get staticHTMLTemplate {
-  File staticTemplateFile =
-      File("lib/feature/html_generation/resources/static_template.html");
+String get layoutTemplate {
+  String path = "${Directory.current.path}"
+      "/feature/html_generation/resources/layout.template.html";
+  File staticTemplateFile = File(path);
+  String staticTemplateContent = staticTemplateFile.readAsStringSync();
+  return staticTemplateContent;
+}
+
+String get codeviewTemplate {
+  String path = "${Directory.current.path}"
+      "/feature/html_generation/resources/codeview.template.html";
+  File staticTemplateFile = File(path);
+  String staticTemplateContent = staticTemplateFile.readAsStringSync();
+  return staticTemplateContent;
+}
+
+String get explorerTemplate {
+  String path = "${Directory.current.path}"
+      "/feature/html_generation/resources/explorer.template.html";
+  File staticTemplateFile = File(path);
   String staticTemplateContent = staticTemplateFile.readAsStringSync();
   return staticTemplateContent;
 }
@@ -43,10 +62,79 @@ String initializePipeline(String codeString, List<AstNode> nodes) {
   return pipeline(codeString, usages, blocks);
 }
 
-String generateHTML(String codeString, List<AstNode> usages) {
-  /** html generation pipeline */
+String getExplorerHTML(List<FileData> files) {
+  String filesHTML = files
+      .map((fd) => "{"
+          "name: '${fd.filename}', "
+          "uri: '${fd.filePath}'}")
+      .toList()
+      .join(",\n");
+  return "$explorerTemplate\n"
+      "<script>\n"
+      "const files = [$filesHTML]\n"
+      "</script>\n";
+}
+
+String getCodeviewHTML(String codeString, List<AstNode> usages) {
   codeString = initializePipeline(codeString, usages);
-  codeString = "$staticHTMLTemplate"
-      "<pre><code>$codeString</code></pre>";
+  codeString = "$codeviewTemplate\n"
+      "<pre><code>$codeString</code></pre>\n";
   return codeString;
+}
+
+String generateCodeviewHTML(
+  String filename,
+  String codeString,
+  List<AstNode> usages,
+) {
+  final cvPath = "../build/html/$filename.codeview.html";
+  var cvHTML = getCodeviewHTML(codeString, usages);
+
+  File cvFile = File(cvPath);
+  cvFile.writeAsStringSync(cvHTML);
+  return cvPath;
+}
+
+class FileData {
+  String filename;
+  String filePath;
+  FileData({this.filename, this.filePath});
+  @override
+  String toString() {
+    return "{filename: $filename, filePath: $filePath}";
+  }
+}
+
+String getLayoutHTML(List<String> filePaths) {
+  final files = filePaths
+      .map((fp) => FileData(
+            filename: fp.split("/").last,
+            filePath: '${Directory.current.path}/$fp',
+          ))
+      .toList();
+
+  final explorerHTML = getExplorerHTML(files);
+
+  return "$layoutTemplate\n"
+      "<div class='grid'>\n"
+      "<div class='left-pane'>\n"
+      "<!-- EXPLORER START -->\n"
+      "$explorerHTML\n"
+      "<!-- EXPLORER END -->\n"
+      "</div>\n"
+      "<div class='right-pane'>\n"
+      "<iframe id='codeview'>\n"
+      "</div>\n"
+      "</div>\n";
+}
+
+String generateLayoutHTML(
+  String filename,
+  List<String> filePaths,
+) {
+  final path = "../build/html/$filename.db.html";
+  var html = getLayoutHTML(filePaths);
+  File file = File(path);
+  file.writeAsStringSync(html);
+  return path;
 }

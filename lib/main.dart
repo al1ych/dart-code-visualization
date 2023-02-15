@@ -1,5 +1,7 @@
 // @dart=2.9
 
+// ignore_for_file: avoid_print
+
 import 'dart:collection';
 import 'dart:developer';
 import 'dart:io';
@@ -22,36 +24,46 @@ part 'feature/html_generation/var_binding.dart';
 part 'feature/html_generation/syntax_highlighting.dart';
 
 void main(List<String> args) {
-  var sources = ['project_1/main', 'project_1/functions'];
+  const projectTitle = 'project_test';
+
+  // var sources = ['project_1/main', 'project_1/functions'];
+
+  List<String> sources = [
+    'program_1',
+    'program_2',
+    'program_3',
+    'program_long'
+  ];
+
+  List<String> cvPaths = [];
 
   for (int i = 0; i < sources.length; i++) {
     String filename = sources[i];
 
-    File codeFile = File('test/$filename.dart');
-    String codeString = codeFile.readAsStringSync();
+    File codeFile = File('../test/$filename.dart');
+    String code = codeFile.readAsStringSync();
 
-    var res = parseString(content: codeString);
+    var res = parseString(content: code);
     var root = res.unit.root;
 
     resolveNames(root); // ast walking
 
-    print("Blocks:");
-    for (int i = 0; i < blocks.length; i++) {
-      print("${blocks[i]} +++++ ${blocks[i].offset} + ${blocks[i].length}");
-    }
+    // print("Blocks:");
+    // for (int i = 0; i < blocks.length; i++) {
+    //   print("${blocks[i]} +++++ ${blocks[i].offset} + ${blocks[i].length}");
+    // }
 
-    print("Generating HTML from code source...");
-    var genHtml = generateHTML(codeString, allVarUsages);
-    final outPath = "build/html/${filename}_dartboard.html";
-    print("Dumping HTML into files...");
-    File outFile = File(outPath);
-    outFile.writeAsStringSync(genHtml);
-    print("Success! Access HTML here: $outPath.");
-    print("Automatically opening the HTML...");
-    Process.run('open', [outPath]).then((result) {
-      // probably macos only
-      stdout.write(result.stdout);
-      stderr.write(result.stderr);
-    });
+    print("Processing source file: $filename.dart...");
+    String cvPath = generateCodeviewHTML(filename, code, allVarUsages);
+    cvPaths.add(cvPath);
   }
+
+  String ltPath = generateLayoutHTML(projectTitle, cvPaths);
+
+  print("DartBoard is ready! Opening ${ltPath.split('/').last}...");
+  Process.run('open', [ltPath]).then((result) {
+    // probably macos only
+    stdout.write(result.stdout);
+    stderr.write(result.stderr);
+  });
 }
