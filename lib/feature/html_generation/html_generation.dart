@@ -108,7 +108,7 @@ class FileData {
 String getLayoutHTML(List<String> filePaths) {
   final files = filePaths
       .map((fp) => FileData(
-            filename: fp.split("/").last,
+            filename: "${fp.split("/").last.split(".").first}.dart",
             filePath: '${Directory.current.path}/$fp',
           ))
       .toList();
