@@ -91,22 +91,6 @@ class VarNameResolveVisitor extends RecursiveAstVisitor {
   }
 }
 
-// class BlockVisitor extends RecursiveAstVisitor {
-//   @override
-//   void visitBlock(Block block) {
-//     // open block
-//     contextStack.add(block);
-//     blocks.add(block);
-//     // proceed down the tree
-//     block.visitChildren(this);
-//     // close block
-//     while (contextStack.last.offset != block.offset) {
-//       contextStack.removeLast();
-//     }
-//     contextStack.removeLast();
-//   }
-// }
-
 resolveNames(AstNode root) {
   _clearAnalysisState();
   root.visitChildren(VarNameResolveVisitor());

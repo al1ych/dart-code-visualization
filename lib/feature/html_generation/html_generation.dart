@@ -29,6 +29,8 @@ String get explorerTemplate {
 }
 
 AstNode _getRootDeclaration(AstNode node) {
+  // to-do: what is this function doing in this file?
+  // should refactor to the name_resolution file
   while (jumpToDeclaration[node] != null &&
       jumpToDeclaration[node].offset != node.offset) {
     node = jumpToDeclaration[node];
