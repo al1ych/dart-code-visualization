@@ -21,7 +21,7 @@ This is how it works:
 - [x] Highlight syntax in the generated HTML
 - [x] Jump to declaration for a variable
 - [ ] Jump to declaration for a function
-- [ ] 👉🏻 👉🏻 Show documentation on cursor hover
+- [ ] Show documentation on cursor hover
 - [ ] 👉🏻 Collapse block scopes
 - [ ] Upper tab bar to switch between tabs with source files
 - [x] Project tree

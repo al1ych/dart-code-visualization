@@ -36,7 +36,17 @@ AstNode _getRootDeclaration(AstNode node) {
   return node;
 }
 
-String pipeline(
+class FileData {
+  String filename;
+  String filePath;
+  FileData({this.filename, this.filePath});
+  @override
+  String toString() {
+    return "{filename: $filename, filePath: $filePath}";
+  }
+}
+
+String codeviewPipeline(
   String codeString,
   List<SimpleIdentifier> usages,
   List<AstNode> blocks,
@@ -45,13 +55,13 @@ String pipeline(
     return codeString;
   }
   String processedCode = codeString;
-  // processedCode = addBlockCollapsers(processedCode, blocks);
-  processedCode = addDeclarationBinding(processedCode, usages);
-  processedCode = addSimpleSyntaxHighlighting(processedCode);
+  processedCode = addBlockCollapsers(processedCode, blocks);
+  // processedCode = addDeclarationBinding(processedCode, usages);
+  // processedCode = addSimpleSyntaxHighlighting(processedCode);
   return processedCode;
 }
 
-String initializePipeline(String codeString, List<AstNode> nodes) {
+String initializeCodeviewPipeline(String codeString, List<AstNode> nodes) {
   List<SimpleIdentifier> usages = [];
   for (var node in nodes) {
     AstNode dRoot = _getRootDeclaration(node); // get to the orig declaration
@@ -59,24 +69,11 @@ String initializePipeline(String codeString, List<AstNode> nodes) {
   }
   usages.sort((a, b) => a.offset - b.offset); // sort by offset
   usages = usages.toSet().toList(); // remove duplicates
-  return pipeline(codeString, usages, blocks);
-}
-
-String getExplorerHTML(List<FileData> files) {
-  String filesHTML = files
-      .map((fd) => "{"
-          "name: '${fd.filename}', "
-          "uri: '${fd.filePath}'}")
-      .toList()
-      .join(",\n");
-  return "$explorerTemplate\n"
-      "<script>\n"
-      "const files = [$filesHTML]\n"
-      "</script>\n";
+  return codeviewPipeline(codeString, usages, blocks);
 }
 
 String getCodeviewHTML(String codeString, List<AstNode> usages) {
-  codeString = initializePipeline(codeString, usages);
+  codeString = initializeCodeviewPipeline(codeString, usages);
   codeString = "$codeviewTemplate\n"
       "<pre><code>$codeString</code></pre>\n";
   return codeString;
@@ -95,14 +92,25 @@ String generateCodeviewHTML(
   return cvPath;
 }
 
-class FileData {
-  String filename;
-  String filePath;
-  FileData({this.filename, this.filePath});
-  @override
-  String toString() {
-    return "{filename: $filename, filePath: $filePath}";
+String getExplorerHTML(List<FileData> files) {
+  String filesHTML = files
+      .map((fd) => "{"
+          "name: '${fd.filename}', "
+          "uri: '${fd.filePath}'}")
+      .toList()
+      .join(",\n");
+
+  String explorerViewContent = "<div id='explorer-view-content'>\n";
+  for (int i = 0; i < files.length; i++) {
+    explorerViewContent += "  <ul id='$i' onclick='selectFile($i)'></ul>\n";
   }
+  explorerViewContent += "</div>\n";
+
+  return "$explorerTemplate\n"
+      "$explorerViewContent\n"
+      "<script>\n"
+      "const files = [$filesHTML]\n"
+      "</script>\n";
 }
 
 String getLayoutHTML(List<String> filePaths) {

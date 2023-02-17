@@ -1,5 +1,7 @@
 <script>
     window.onload = function() {
+
+
         const explorerViewContent = document.getElementById('explorer-view-content');
         for (let i = 0; i < files.length; i++) {
             explorerViewContent.children[i].innerHTML = files[i].name;
@@ -24,7 +26,7 @@
 <style>
     * {
         font-family: 'JetBrains Mono', 'Fira Code';
-        font-weight: bold;
+        /* font-weight: bold; */
     }
 
     ul {
@@ -52,12 +54,12 @@
     }
 </style>
 
-<div id="explorer-view-content">
+<!-- <div id="explorer-view-content">
     <ul id="0" onclick="selectFile(0)"></ul>
     <ul id="1" onclick="selectFile(1)"></ul>
     <ul id="2" onclick="selectFile(2)"></ul>
     <ul id="3" onclick="selectFile(3)"></ul>
-</div>
+</div> -->
 
 <!-- 
 <script>
