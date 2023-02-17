@@ -20,6 +20,9 @@ String addBlockCollapsers(String codeString, List<AstNode> blocks) {
   // todo за исключением хтмл-ных тегов которые добавляются
   // todo на других этапах : то есть добавляем в черный список
   // todo все символы которые составляют хтмл-теги и потом игнорим при подсчете j
+
+  // todo пофиксить накладывание блоков со всех файлов в каждый: нужно на каждый файл держать свои блоки
+
   String newCode = "";
   List<Event> e = [];
   for (int i = 0; i < blocks.length; i++) {
@@ -36,7 +39,8 @@ String addBlockCollapsers(String codeString, List<AstNode> blocks) {
   }
   e.sort((Event a, Event b) => a.x - b.x);
   for (int i = 0; i < e.length; i++) {
-    print("Event #${e[i].i}: ${e[i].type} : ${e[i].x}");
+    print(
+        "Event #${e[i].i}: ${e[i].type} : ${e[i].x} - block: ${blocks[e[i].i]}");
     final b = (i == 0
         ? codeString.substring(0, e[i].x)
         : codeString.substring(e[i - 1].x, e[i].x));

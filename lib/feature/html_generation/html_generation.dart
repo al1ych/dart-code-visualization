@@ -59,7 +59,7 @@ String codeviewPipeline(
   String processedCode = codeString;
   processedCode = addBlockCollapsers(processedCode, blocks);
   // processedCode = addDeclarationBinding(processedCode, usages);
-  // processedCode = addSimpleSyntaxHighlighting(processedCode);
+  processedCode = addSimpleSyntaxHighlighting(processedCode);
   return processedCode;
 }
 
