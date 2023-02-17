@@ -24,23 +24,33 @@ part 'feature/html_generation/var_binding.dart';
 part 'feature/html_generation/syntax_highlighting.dart';
 
 void main(List<String> args) {
-  const projectTitle = 'project_test';
+  const projectTitle = 'project_1';
 
-  // var sources = ['project_1/main', 'project_1/functions'];
+  // mock data
+  // List<String> sources = [
+  //   'program_1',
+  //   'program_2',
+  //   'program_3',
+  //   'program_long'
+  // ];
 
-  List<String> sources = [
-    'program_1',
-    'program_2',
-    'program_3',
-    'program_long'
-  ];
+  // get all dart files in a folder
+  List<String> sources = [];
+  Directory dir = Directory('../test/$projectTitle');
+  dir.listSync().forEach((file) {
+    if (file.path.endsWith('.dart')) {
+      sources.add(file.path.split('/').last.split('.').first);
+    }
+  });
+
+  print("sources: $sources");
 
   List<String> cvPaths = [];
 
   for (int i = 0; i < sources.length; i++) {
     String filename = sources[i];
 
-    File codeFile = File('../test/$filename.dart');
+    File codeFile = File('../test/$projectTitle/$filename.dart');
     String code = codeFile.readAsStringSync();
 
     var res = parseString(content: code);
