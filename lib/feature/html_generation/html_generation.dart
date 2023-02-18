@@ -59,7 +59,7 @@ String codeviewPipeline(
   String processedCode = codeString;
   processedCode = addBlockCollapsers(processedCode, blocks);
   // processedCode = addDeclarationBinding(processedCode, usages);
-  processedCode = addSimpleSyntaxHighlighting(processedCode);
+  // processedCode = addSimpleSyntaxHighlighting(processedCode);
   return processedCode;
 }
 
@@ -71,7 +71,7 @@ String initializeCodeviewPipeline(String codeString, List<AstNode> nodes) {
   }
   usages.sort((a, b) => a.offset - b.offset); // sort by offset
   usages = usages.toSet().toList(); // remove duplicates
-  return codeviewPipeline(codeString, usages, blocks);
+  return codeviewPipeline(codeString, usages, blocks[currentFile]);
 }
 
 String getCodeviewHTML(String codeString, List<AstNode> usages) {

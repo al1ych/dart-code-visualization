@@ -12,16 +12,13 @@ import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/ast/visitor.dart';
 
 part 'feature/syntax_highlighting/syntax_highlighting.dart';
-
 part 'feature/name_resolution/name_resolution.dart';
-
 part 'feature/html_generation/html_generation.dart';
-
 part 'feature/html_generation/block_collapsers.dart';
-
 part 'feature/html_generation/var_binding.dart';
-
 part 'feature/html_generation/syntax_highlighting.dart';
+
+String currentFile = '';
 
 void main(List<String> args) {
   const projectTitle = 'project_1';
@@ -50,13 +47,14 @@ void main(List<String> args) {
   for (int i = 0; i < sources.length; i++) {
     String filename = sources[i];
 
+    currentFile = filename;
     File codeFile = File('../test/$projectTitle/$filename.dart');
     String code = codeFile.readAsStringSync();
 
     var res = parseString(content: code);
     var root = res.unit.root;
 
-    resolveNames(root); // ast walking
+    startAnalysis(root); // ast walking
 
     // print("Blocks:");
     // for (int i = 0; i < blocks.length; i++) {

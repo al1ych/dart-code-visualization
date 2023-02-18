@@ -3,7 +3,8 @@
 part of '../../main.dart';
 
 List<AstNode> contextStack = [];
-List<AstNode> blocks = [];
+List<AstNode> blocksBuffer = [];
+Map<String, List<AstNode>> blocks = {}; // blocks of particular file
 Map<SimpleIdentifier, AstNode> jumpToDeclaration = {};
 Map<AstNode, List<SimpleIdentifier>> jumpToUsages = {};
 
@@ -11,6 +12,7 @@ void _clearAnalysisState() {
   contextStack = [];
   jumpToDeclaration = {};
   jumpToUsages = {};
+  blocksBuffer = [];
 }
 
 void _connectUsageWithDeclaration(AstNode usage, AstNode decl) {
@@ -73,6 +75,7 @@ class VarNameResolveVisitor extends RecursiveAstVisitor {
   @override
   void visitVariableDeclaration(VariableDeclaration node) {
     contextStack.add(node);
+    print("visit var decl!");
     super.visitVariableDeclaration(node);
   }
 
@@ -80,7 +83,7 @@ class VarNameResolveVisitor extends RecursiveAstVisitor {
   void visitBlock(Block block) {
     // open block
     contextStack.add(block);
-    blocks.add(block);
+    blocksBuffer.add(block);
     // proceed down the tree
     block.visitChildren(this);
     // close block
@@ -91,7 +94,8 @@ class VarNameResolveVisitor extends RecursiveAstVisitor {
   }
 }
 
-resolveNames(AstNode root) {
+startAnalysis(AstNode root) {
   _clearAnalysisState();
   root.visitChildren(VarNameResolveVisitor());
+  blocks[currentFile] = blocksBuffer;
 }
