@@ -21,8 +21,6 @@ String addBlockCollapsers(String codeString, List<AstNode> blocks) {
   // todo на других этапах : то есть добавляем в черный список
   // todo все символы которые составляют хтмл-теги и потом игнорим при подсчете j
 
-  // todo пофиксить накладывание блоков со всех файлов в каждый: нужно на каждый файл держать свои блоки
-
   String newCode = "";
   List<Event> e = [];
   for (int i = 0; i < blocks.length; i++) {
