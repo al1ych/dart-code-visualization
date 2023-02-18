@@ -77,7 +77,7 @@ class SyntaxHighlighting {
         RegExp(r"\bmain\b"): "main",
         RegExp(r'\".*\"'): "quote",
         RegExp(r"\B#[a-zA-Z0-9]+\b"): "literal",
-        RegExp(r";.*"): "semicolon",
+        RegExp(r"\/\/.*"): "semicolon", // todo rename to comment
         RegExp(r"\b(" + keywords.join("|") + r")\b"): "keyword",
         RegExp(r"\b(" + dataTypes.join("|") + r")\b"): "data-type",
       };
