@@ -1,6 +1,6 @@
 // @dart=2.9
 
-part of "../../main.dart";
+part of '../../../main.dart';
 
 String _wrapColor(String match, String colorClass) {
   final classes = "class='$colorClass'";

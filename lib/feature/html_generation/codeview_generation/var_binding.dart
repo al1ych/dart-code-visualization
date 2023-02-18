@@ -1,6 +1,6 @@
 // @dart=2.9
 
-part of "../../main.dart";
+part of '../../../main.dart';
 
 String _wrapUsage(String usage, int uPos, int dPos) {
   const classes = "class='variable-usage'";
