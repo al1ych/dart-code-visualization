@@ -45,10 +45,12 @@ String addBlockCollapsers(String codeString, List<AstNode> blocks) {
     if (e[i].type == EventType.opens) {
       final id = "block-${e[i].i}";
       const classes = "block";
-      final events = "onclick='collapse(`$id`)'";
-      newCode += "$b<spoiler id='$id' class='$classes' $events>";
+      final events = "oncontextmenu='collapse(`$id`)'";
+      String content = b;
+      newCode += "$content<span id='$id' class='$classes' $events>";
     } else {
-      newCode += "$b</spoiler>";
+      String content = b;
+      newCode += "$content</span>";
     }
   }
   return newCode;

@@ -5,7 +5,6 @@
 import 'dart:collection';
 import 'dart:developer';
 import 'dart:io';
-// import 'package:flutter/material.dart';
 
 import 'package:analyzer/dart/analysis/utilities.dart';
 import 'package:analyzer/dart/ast/ast.dart';
@@ -33,7 +32,6 @@ void main(List<String> args) {
   //   'program_long'
   // ];
 
-  // get all dart files in a folder
   List<String> sources = [];
   Directory dir = Directory('../test/$projectTitle');
   dir.listSync().forEach((file) {
@@ -57,11 +55,6 @@ void main(List<String> args) {
     var root = res.unit.root;
 
     startAnalysis(root); // ast walking
-
-    // print("Blocks:");
-    // for (int i = 0; i < blocks.length; i++) {
-    //   print("${blocks[i]} +++++ ${blocks[i].offset} + ${blocks[i].length}");
-    // }
 
     print("Processing source file: $filename.dart...");
     String cvPath = generateCodeviewHTML(filename, code, allVarUsages);
