@@ -11,7 +11,7 @@ import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/ast/visitor.dart';
 
 part 'feature/syntax_highlighting/syntax_highlighting.dart';
-part 'feature/name_resolution/name_resolution.dart';
+part 'feature/ast_analysis/ast_analysis.dart';
 part 'feature/html_generation/codeview_generation/codeview.dart';
 part 'feature/html_generation/layout.dart';
 part 'feature/html_generation/explorer.dart';
