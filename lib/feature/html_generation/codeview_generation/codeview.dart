@@ -4,6 +4,8 @@
 
 part of '../../../main.dart';
 
+Map<String, Map<int, List<String>>> tags = {}; // each file -> map<pos, tags>
+
 String get codeviewTemplate {
   String path = "${Directory.current.path}"
       "/feature/html_generation/resources/codeview.template.html";
