@@ -24,6 +24,24 @@ AstNode _getRootDeclaration(AstNode node) {
   return node;
 }
 
+String executePipeline(String codeString) {
+  // sort tag keys
+  final keys = tags[currentFile].keys.toList();
+  keys.sort();
+  print("keys: $keys");
+  String newCode = codeString;
+  // iterate over keys from end to beginning
+  for (int i = keys.length - 1; i >= 0; i--) {
+    final pos = keys[i];
+    final ts = tags[currentFile][pos];
+    for (int j = 0; j < ts.length; j++) {
+      final t = ts[j];
+      newCode = newCode.substring(0, pos) + t + newCode.substring(pos);
+    }
+  }
+  return newCode;
+}
+
 String codeviewPipeline(
   String codeString,
   List<SimpleIdentifier> usages,
@@ -33,10 +51,10 @@ String codeviewPipeline(
     return codeString;
   }
   String processedCode = codeString;
-  processedCode = addBlockCollapsers(processedCode, blocks);
+  addBlockCollapsers(processedCode, blocks);
   // processedCode = addDeclarationBinding(processedCode, usages);
-  processedCode = addSimpleSyntaxHighlighting(processedCode);
-  return processedCode;
+  addSimpleSyntaxHighlighting(processedCode);
+  return executePipeline(processedCode);
 }
 
 String initializeCodeviewPipeline(String codeString, List<AstNode> nodes) {

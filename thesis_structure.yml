@@ -1,0 +1,62 @@
+Structure:
+-	Abstract:
+    -	Introduction
+    -	Objective, Novelty & Design approach
+    - Conclusion
+-	Intro:
+    - Problem insight
+    - Task description
+    - Applicability
+-	Literature review:
+    - Source Code Analysis
+    - Static Analysis
+    - Name Resolution & Scope Analysis
+    - Source Code Visualization
+    - Program text visualization
+    - Graphical program visualization
+    - Generation
+-	Non-Functional Requirements:
+    - high, medium, low
+-	Functional Requirements:
+    -	high, medium, low
+-	Implementation:
+    - Tech stack
+    - Design decisions & Trade-offs:
+        - Why no Templater?:
+            - low level => high level of control
+        - Why HTML in general?:
+            - ubiquitous
+        - Why not JS framework?:
+            - low level => high level of control
+            - time to compile for a framework
+            - more dependencies = less portatibility & bundle size
+        - Why generate/build separate HTML files:
+            - to work with code more logically
+            - to build structured HTML, nesting
+        - Why no server:
+            - to keep it simple
+            - to keep it portable
+            - to keep it fast
+    - Best practices used:
+    -	Project Architecture:
+        - Folder Structure
+        - Maintainability
+        - Scalability
+    - Main Features (interesting details of implementation):
+        - Block scoping:
+            - identify scopes using AST
+            - scanline algorithm
+        - Syntax highlighting (regex order)
+        - Line numbers (?)
+        - HTML generation:
+            - modular pipeline:
+                - initial approach (code = step1(code); code = step2(code))
+                - tag collision problem
+                - better approach (step1(); step2(); code = pipe(code))
+            - modular html layout (codeview, explorer, layout)
+    -	Testing:
+        - test that all files in input project folder are analyzed
+        - test that with classes
+        - test that with functions
+        - test that with variables
+-	Value/Purpose?

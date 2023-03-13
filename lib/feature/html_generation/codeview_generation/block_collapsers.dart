@@ -12,7 +12,7 @@ class Event {
   Event({this.i, this.x, this.type});
 }
 
-String addBlockCollapsers(String codeString, List<AstNode> blocks) {
+void addBlockCollapsers(String codeString, List<AstNode> blocks) {
   // pipeline step #2: map and wrap all the elements to highlight syntax
   // this one implements the scanline algorithm
   // html of code -> html of code
@@ -48,41 +48,13 @@ String addBlockCollapsers(String codeString, List<AstNode> blocks) {
       const classes = "block";
       final events = "oncontextmenu='collapse(`$id`)'";
       final tag = "<span id='$id' class='$classes' $events>";
-      newCode += "$content$tag";
-      // test
       tags[currentFile].putIfAbsent(e[i].x, () => []);
       tags[currentFile][e[i].x].add(tag);
     } else {
       String content = b;
       const tag = "</span>";
-      newCode += "$content$tag";
-      // test
       tags[currentFile].putIfAbsent(e[i].x, () => []);
       tags[currentFile][e[i].x].add(tag);
     }
   }
-
-  // test
-  // sort tag keys
-  final keys = tags[currentFile].keys.toList();
-  keys.sort();
-  print("keys: $keys");
-  newCode = codeString;
-  // iterate over keys from end to beginning
-  for (int i = keys.length - 1; i >= 0; i--) {
-    final pos = keys[i];
-    final ts = tags[currentFile][pos];
-    print("pos: $pos | ts len: ${ts.length}");
-    String test = "";
-    for (int j = 0; j < ts.length; j++) {
-      final t = ts[j];
-      newCode = newCode.substring(0, pos) + t + newCode.substring(pos);
-      test += " $t";
-    }
-    print("test: $test");
-  }
-
-  print("newCode: $newCode");
-
-  return newCode;
 }

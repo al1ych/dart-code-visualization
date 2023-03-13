@@ -2,23 +2,21 @@
 
 part of '../../../main.dart';
 
-String _wrapColor(String match, String colorClass) {
-  final classes = "class='$colorClass'";
-  return "<span $classes>$match</span>";
-}
-
-String addSimpleSyntaxHighlighting(String codeString) {
-  // pipeline step: map and wrap all the elements to highlight syntax
-  // html of code -> html of code
+void addSimpleSyntaxHighlighting(String codeString) {
   for (RegExp regExp in SyntaxHighlighting.codePatterns.keys) {
     List<RegExpMatch> matches = regExp.allMatches(codeString).toList();
     final color = SyntaxHighlighting.codePatterns[regExp];
     for (int i = matches.length - 1; i >= 0; i--) {
-      final before = codeString.substring(0, matches[i].start);
-      final match = codeString.substring(matches[i].start, matches[i].end);
-      final after = codeString.substring(matches[i].end);
-      codeString = before + _wrapColor(match, color) + after;
+      final classes = "class='$color'";
+
+      final tag1 = "<span $classes>";
+      const tag2 = "</span>";
+
+      tags[currentFile].putIfAbsent(matches[i].start, () => []);
+      tags[currentFile].putIfAbsent(matches[i].end, () => []);
+
+      tags[currentFile][matches[i].start].add(tag1);
+      tags[currentFile][matches[i].end].add(tag2);
     }
   }
-  return codeString;
 }
