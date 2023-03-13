@@ -7,18 +7,21 @@ String _wrapUsage(String usage, int uPos, int dPos) {
   return "<span $classes id='$uPos' onclick='jumpTo($dPos)'>$usage</span>";
 }
 
-String addDeclarationBinding(String codeString, List<SimpleIdentifier> usages) {
-  // pipeline step: wrap all the usages, give id and declaration pointer
-  // html of code -> html of code
-  String newCode = "";
+void addDeclarationBinding(String codeString, List<SimpleIdentifier> usages) {
   for (int i = 0; i < usages.length; i++) {
-    final from = (i == 0 ? 0 : usages[i - 1].offset + usages[i - 1].length);
-    final to = usages[i].offset;
-    final declPos = _getRootDeclaration(usages[i]).offset;
-    String substituted = usages[i].name;
-    substituted = _wrapUsage(substituted, usages[i].offset, declPos);
-    newCode += codeString.substring(from, to) + substituted;
+    final declarationPos = _getRootDeclaration(usages[i]).offset;
+
+    const classes = "class='variable-usage'";
+    final events = "onclick='jumpTo($declarationPos)'";
+    final usagePos = usages[i].offset;
+
+    final tag1 = "<span id='$usagePos' $classes $events>";
+    const tag2 = "</span>";
+
+    tags[currentFile].putIfAbsent(usagePos, () => []);
+    tags[currentFile].putIfAbsent(usagePos + usages[i].length, () => []);
+
+    tags[currentFile][usagePos].add(tag1);
+    tags[currentFile][usagePos + usages[i].length].add(tag2);
   }
-  newCode += codeString.substring(usages.last.offset + usages.last.length);
-  return newCode;
 }

@@ -28,7 +28,6 @@ String executePipeline(String codeString) {
   // sort tag keys
   final keys = tags[currentFile].keys.toList();
   keys.sort();
-  print("keys: $keys");
   String newCode = codeString;
   // iterate over keys from end to beginning
   for (int i = keys.length - 1; i >= 0; i--) {
@@ -52,7 +51,7 @@ String codeviewPipeline(
   }
   String processedCode = codeString;
   addBlockCollapsers(processedCode, blocks);
-  // processedCode = addDeclarationBinding(processedCode, usages);
+  addDeclarationBinding(processedCode, usages);
   addSimpleSyntaxHighlighting(processedCode);
   return executePipeline(processedCode);
 }
