@@ -22,7 +22,7 @@ This is how it works:
 - [x] Jump to declaration for a variable
 - [ ] Jump to declaration for a function
 - [ ] Show documentation on cursor hover
-- [ ] 👉🏻 Collapse block scopes
+- [x] Collapse block scopes
 - [ ] Upper tab bar to switch between tabs with source files
 - [x] Project tree
 - [x] Work with all the source files in the input project
