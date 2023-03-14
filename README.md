@@ -1,6 +1,6 @@
 # DartBoard
 
-![img_2.png](logo_trans.png)
+![img_2.png](logo2.png)
 
 DartBoard is a cross-platform code visualization tool.
 It has most of the benefits of the modern IDEs, **but**
@@ -9,9 +9,9 @@ you don't need to install it!
 This is how it works:
 
 - DartBoard takes your Dart/Flutter codebase.
-- It then processes it into a static web-site,
-- That you can then just send to your supervisor who doesn't
-  even need to have Dart env installed on their computer.
+- And generates a static web-site,
+- That you can then just send to your supervisor doesn't
+  have Dart env installed on their computer.
 
 ## Features
 
@@ -21,7 +21,7 @@ This is how it works:
 - [x] Highlight syntax in the generated HTML
 - [x] Jump to declaration for a variable
 - [ ] Jump to declaration for a function
-- [ ] Show documentation on cursor hover
+- [ ] Show documentation on cursor hover 👈🏻
 - [x] Collapse block scopes
 - [ ] Upper tab bar to switch between tabs with source files
 - [x] Project tree
