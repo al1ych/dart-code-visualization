@@ -27,26 +27,28 @@ This is how it works:
 - [x] Collapse block scopes
 - [x] Side-bar to switch between tabs with source files
 - [x] Project tree
-- [x] Work with all the source files in the input project
+- [x] Upload the source files of the input project
 
 ### Medium priority
 
-- [ ] Theming
 - [ ] Search by regex expression
 - [ ] Upload zip project
 - [ ] Upload via github repo
+- [ ] Gray out vars and functions that are not used
+- [ ] Gray out parts of code that are inaccessible
+
 
 ### Low priority
 
+- [ ] dart run dart_code_metrics:metrics analyze lib
+- [ ] Theming
 - [x] Open generated HTML automatically for MacOS
 - [x] Open generated HTML automatically for Windows
 - [x] Open generated HTML automatically for Linux
-- [ ] Gray out vars and functions that are not used
-- [ ] Gray out parts of code that are inaccessible
 - [ ] Add support for external plugins
 - [ ] Make my own plugins
 - [ ] Highlight the second parenthesis/bracket
-- [ ] Scrollable minified code copy tab to the right of the screen (like in Sublime)
+- [ ] Scrollable minified code tab to the right of the screen (like in Sublime)
 - [ ] Check code for errors
 - [ ] Check linting errors
 - [ ] Suggest linting fixes
