@@ -38,11 +38,11 @@ Structure:
             - to keep it portable
             - to keep it fast
     - Best practices used:
-    -	Project Architecture:
+    - Project Architecture:
         - Folder Structure
         - Maintainability
         - Scalability
-    - Main Features (interesting details of implementation):
+    - Key Features and Implementation Details:
         - Block scoping:
             - identify scopes using AST
             - scanline algorithm
@@ -59,4 +59,5 @@ Structure:
         - test that with classes
         - test that with functions
         - test that with variables
--	Value/Purpose?
+-	Value/Purpose?:
+    - use cases
