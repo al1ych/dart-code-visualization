@@ -23,9 +23,11 @@ This is how it works:
 - [ ] Jump to declaration for a function
 - [ ] Show documentation on cursor hover 👈🏻
 - [x] Collapse block scopes
-- [ ] Upper tab bar to switch between tabs with source files
+- [x] Side-bar to switch between tabs with source files
 - [x] Project tree
-- [x] Work with all the source files in the input project 👈🏻
+- [x] Work with all the source files in the input project
+- [ ] Class declaration binding
+- [ ] Show class specification/fields on hover
 
 ### Medium priority
 
@@ -38,8 +40,8 @@ This is how it works:
 ### Low priority
 
 - [x] Open generated HTML automatically for MacOS
-- [ ] Open generated HTML automatically for Windows
-- [ ] Open generated HTML automatically for Linux
+- [x] Open generated HTML automatically for Windows
+- [x] Open generated HTML automatically for Linux
 - [ ] Gray out vars and functions that are not used
 - [ ] Gray out parts of code that are inaccessible
 - [ ] Add support for external plugins
