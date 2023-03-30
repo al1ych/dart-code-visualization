@@ -74,11 +74,12 @@ class SyntaxHighlighting {
   ];
 
   static get codePatterns => {
-        RegExp(r"\bmain\b"): "main",
-        RegExp(r'\".*\"'): "quote",
-        RegExp(r"\B#[a-zA-Z0-9]+\b"): "literal",
-        RegExp(r"\/\/.*"): "semicolon", // todo rename to comment
-        RegExp(r"\b(" + keywords.join("|") + r")\b"): "keyword",
-        RegExp(r"\b(" + dataTypes.join("|") + r")\b"): "data-type",
+        RegExp(r"\bmain\b(?<!\/\/.*)"): "main",
+        RegExp(r'\".*\"(?<!\/\/.*)'): "quote",
+        RegExp(r"\/\/.*"): "comment",
+        RegExp(r"\/\*[\s\S]*?\*\/"): "comment",
+        // RegExp(r"\b(0[xX][a-fA-F0-9]+|\d+)(?<!\/\/.*)\b"): "literal",
+        RegExp(r"\b(" + keywords.join("|") + r")\b(?<!\/\/.*)"): "keyword",
+        RegExp(r"\b(" + dataTypes.join("|") + r")\b(?<!\/\/.*)"): "data-type",
       };
 }

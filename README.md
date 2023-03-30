@@ -21,13 +21,13 @@ This is how it works:
 - [x] Highlight syntax in the generated HTML
 - [x] Jump to declaration for a variable
 - [ ] Jump to declaration for a function
+- [ ] Jump to declaration for a class
 - [ ] Show documentation on cursor hover 👈🏻
+- [ ] Show class specification/fields on hover
 - [x] Collapse block scopes
 - [x] Side-bar to switch between tabs with source files
 - [x] Project tree
 - [x] Work with all the source files in the input project
-- [ ] Class declaration binding
-- [ ] Show class specification/fields on hover
 
 ### Medium priority
 
@@ -35,7 +35,6 @@ This is how it works:
 - [ ] Search by regex expression
 - [ ] Upload zip project
 - [ ] Upload via github repo
-- [ ] Project tree folder collapsing
 
 ### Low priority
 
@@ -62,6 +61,7 @@ This is how it works:
 - [ ] Github Action. Use-case: automate generating the HTML alongside the documentation pipelines,
   linters, testers, builders, etc.
 - [ ] Integration with pub.dev (make it a pub.dev package)
+- [ ] Project tree as an actual tree & Project tree folder collapsing
 
 ## System requirements
 
