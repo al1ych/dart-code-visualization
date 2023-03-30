@@ -83,6 +83,10 @@ String generateCodeviewHTML(
   var cvHTML = getCodeviewHTML(codeString, usages);
 
   File cvFile = File(cvPath);
+
+  // Create necessary directories
+  cvFile.parent.createSync(recursive: true);
+
   cvFile.writeAsStringSync(cvHTML);
   return cvPath;
 }

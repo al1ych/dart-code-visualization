@@ -21,34 +21,20 @@ part 'feature/html_generation/codeview_generation/syntax_highlighting.dart';
 
 String currentFile = '';
 
-void traverseDirectory(Directory directory, List<String> sources) {
-  List<FileSystemEntity> files = directory.listSync();
-  for (FileSystemEntity file in files) {
-    if (file is File && file.path.endsWith('.dart')) {
-      sources.add(file.path.split('/').last.split('.').first);
-    } else if (file is Directory) {
-      traverseDirectory(file, sources);
-    }
-  }
-}
-
 void main(List<String> args) {
-  const projectTitle = 'project_1';
+  if (args.isEmpty) {
+    print('Please provide the project title as an argument.');
+    exit(1);
+  }
 
-  // mock data
-  // List<String> sources = [
-  //   'program_1',
-  //   'program_2',
-  //   'program_3',
-  //   'program_long'
-  // ];
+  String projectTitle = args[0];
 
   List<String> sources = [];
   Directory dir = Directory('../test/$projectTitle');
 
   dir.listSync(recursive: true).forEach((file) {
     if (file is File && file.path.endsWith('.dart')) {
-      sources.add(file.path); // Store the full file path
+      sources.add(file.path);
     }
   });
 
@@ -81,9 +67,20 @@ void main(List<String> args) {
   String ltPath = generateLayoutHTML(projectTitle, cvPaths);
 
   print("DartBoard is ready! Opening ${ltPath.split('/').last}...");
-  Process.run('open', [ltPath]).then((result) {
-    // probably macos only
-    stdout.write(result.stdout);
-    stderr.write(result.stderr);
-  });
+  if (Platform.isMacOS) {
+    Process.run('open', [ltPath]).then((result) {
+      stdout.write(result.stdout);
+      stderr.write(result.stderr);
+    });
+  } else if (Platform.isWindows) {
+    Process.run('start', [ltPath], runInShell: true).then((result) {
+      stdout.write(result.stdout);
+      stderr.write(result.stderr);
+    });
+  } else if (Platform.isLinux) {
+    Process.run('xdg-open', [ltPath]).then((result) {
+      stdout.write(result.stdout);
+      stderr.write(result.stderr);
+    });
+  }
 }
