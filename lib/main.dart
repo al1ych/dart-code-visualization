@@ -21,6 +21,17 @@ part 'feature/html_generation/codeview_generation/syntax_highlighting.dart';
 
 String currentFile = '';
 
+void traverseDirectory(Directory directory, List<String> sources) {
+  List<FileSystemEntity> files = directory.listSync();
+  for (FileSystemEntity file in files) {
+    if (file is File && file.path.endsWith('.dart')) {
+      sources.add(file.path.split('/').last.split('.').first);
+    } else if (file is Directory) {
+      traverseDirectory(file, sources);
+    }
+  }
+}
+
 void main(List<String> args) {
   const projectTitle = 'project_1';
 
@@ -34,9 +45,10 @@ void main(List<String> args) {
 
   List<String> sources = [];
   Directory dir = Directory('../test/$projectTitle');
-  dir.listSync().forEach((file) {
-    if (file.path.endsWith('.dart')) {
-      sources.add(file.path.split('/').last.split('.').first);
+
+  dir.listSync(recursive: true).forEach((file) {
+    if (file is File && file.path.endsWith('.dart')) {
+      sources.add(file.path); // Store the full file path
     }
   });
 
@@ -45,10 +57,15 @@ void main(List<String> args) {
   List<String> cvPaths = [];
 
   for (int i = 0; i < sources.length; i++) {
-    String filename = sources[i];
+    String filePath = sources[i];
+    print("filePath: $filePath");
+    // String filename = filePath.split('/').last.split('.').first;
+    List<String> pathComponents = filePath.split('/');
+    int projectTitleIndex = pathComponents.indexOf(projectTitle);
+    String filename = pathComponents.skip(projectTitleIndex + 1).join('/');
 
     currentFile = filename;
-    File codeFile = File('../test/$projectTitle/$filename.dart');
+    File codeFile = File(filePath);
     String code = codeFile.readAsStringSync();
 
     var res = parseString(content: code);
