@@ -1,0 +1,133 @@
+<style>
+    @import url("https://cdn.jsdelivr.net/gh/tonsky/FiraCode@1.207/distr/fira_code.css");
+    @import url("https://dev-cats.github.io/code-snippets/JetBrainsMono.css");
+
+    * {
+        color: #444;
+        scroll-behavior: smooth;
+        scroll-padding-top: 5.5em;
+        margin-top: 10px;
+        animation: fade-in 0.2s ease-in-out;
+    }
+    
+    body {
+        background-color: white;
+    }
+
+    @keyframes fade-in {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+
+    code {
+        font-family: 'JetBrains Mono', 'Fira Code';
+        font-size: 105%;
+    }
+
+    /* todo: span -> div, remove whitespacing at the end */
+    div {
+    }
+
+    .block {
+        background-color: rgba(0, 0, 0, 0.05);
+        cursor: pointer;
+        visibility: visible;
+    }
+
+    .collapsed {
+        /* display: none; */
+    }
+
+    .declaration-highlighted {
+        background-color: #5e9efc !important;
+        color: white !important;
+    }
+
+    .variable-usage {
+        color: #5e9efc;
+    }
+
+    /* todo add unused code highlighting */
+    /* todo add comment highlighting */
+
+    .main {
+        color: #fc5e5e;
+        font-weight: bold;
+        background-color: transparent;
+    }
+
+    .quote {
+        color: #fc5e5e;
+        background-color: transparent;
+    }
+
+    .data-type {
+        color: #c25efc;
+        background-color: transparent;
+    }
+
+    .literal {
+        color: #000;
+        background-color: transparent;
+    }
+
+    .keyword {
+        color: #ff7c2c;
+        background-color: transparent;
+    }
+
+    .comment {
+        color: #6b8e23;
+        background-color: transparent;
+    }
+</style>
+
+<script>
+    function jumpTo(whereTo) {
+        console.log(`Jumping to ${whereTo}`)
+        document.getElementById(whereTo).classList.add("declaration-highlighted")
+        window.location.hash = whereTo;
+        setTimeout(() => {
+            document.getElementById(whereTo).classList.remove("declaration-highlighted")
+        }, 3000)
+    }
+
+    const collapseTimeout = 100;
+    let canCollapse = true;
+    let collapseBuffer = {};
+
+    function _initiateCooldown(id) {
+        canCollapse = false;
+        setTimeout(() => {
+            canCollapse = true;
+        }, collapseTimeout);
+    }
+
+    function collapse(blockId) {
+        // this is oncontextmenu, so we need to prevent default
+        event.preventDefault();
+        if (!canCollapse) return
+        // toggling mechanism:
+        if (document.getElementById(blockId).classList.contains("collapsed")) {
+            // then we want to unravel
+            console.log(`Unraveling ${blockId}!`)
+            document.getElementById(blockId).classList.remove("collapsed")
+            document.getElementById(blockId).innerHTML = collapseBuffer[blockId];
+            _initiateCooldown(blockId)
+        } else {
+            // we want to collapse
+            console.log(`Collapsing ${blockId}!`)
+            document.getElementById(blockId).classList.add("collapsed")
+            collapseBuffer[blockId] = document.getElementById(blockId).innerHTML;
+            document.getElementById(blockId).innerHTML = "...";
+            _initiateCooldown(blockId)
+        }
+    }
+
+</script>
+
+<!-- <pre><code>$codeString</code></pre> -->
