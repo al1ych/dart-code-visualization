@@ -57,7 +57,7 @@ List<AstNode> get allVarUsages {
   return varUsages;
 }
 
-class VarNameResolveVisitor extends RecursiveAstVisitor {
+class NameResolveAndContextStackVisitor extends RecursiveAstVisitor {
   @override
   visitSimpleFormalParameter(SimpleFormalParameter node) {
     final id = node.identifier;
@@ -75,7 +75,6 @@ class VarNameResolveVisitor extends RecursiveAstVisitor {
   @override
   void visitVariableDeclaration(VariableDeclaration node) {
     contextStack.add(node);
-    print("visit var decl!");
     super.visitVariableDeclaration(node);
   }
 
@@ -92,10 +91,26 @@ class VarNameResolveVisitor extends RecursiveAstVisitor {
     }
     contextStack.removeLast();
   }
+
+  @override
+  void visitClassDeclaration(ClassDeclaration node) {
+    print("ClassDeclaration: ${node}");
+
+    // Open class block
+    contextStack.add(node);
+    blocksBuffer.add(node);
+
+    // Proceed down the tree
+    node.visitChildren(this);
+
+    // Close class block
+    contextStack.removeLast();
+  }
 }
 
 startAnalysis(AstNode root) {
   _clearAnalysisState();
-  root.visitChildren(VarNameResolveVisitor());
+  root.visitChildren(NameResolveAndContextStackVisitor());
+  root.visitChildren(DocumentationCommentVisitor());
   blocks[currentFile] = blocksBuffer;
 }

@@ -58,6 +58,7 @@ class SyntaxHighlighting {
     "show",
     "implements",
     "static",
+    "class",
   ];
 
   static const List<String> dataTypes = [

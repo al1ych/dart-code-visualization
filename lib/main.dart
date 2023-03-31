@@ -18,6 +18,7 @@ part 'feature/html_generation/explorer.dart';
 part 'feature/html_generation/codeview_generation/block_collapsers.dart';
 part 'feature/html_generation/codeview_generation/var_binding.dart';
 part 'feature/html_generation/codeview_generation/syntax_highlighting.dart';
+part 'feature/ast_analysis/comment_analysis.dart';
 
 String currentFile = '';
 
