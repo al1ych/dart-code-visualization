@@ -1,10 +1,10 @@
 <script>
-     function truncateFilePath(path, maxLength = 30) {
+    function truncateFilePath(path, maxLength = 30) {
         if (path.length <= maxLength) return path;
-        const startLength = Math.floor(maxLength / 2) - 1;
-        const endLength = maxLength - startLength - 3;
-        return `${path.slice(0, startLength)}...${path.slice(-endLength)}`;
+        const visibleLength = maxLength - 3; // Subtracting 3 to account for the "..."
+        return `...${path.slice(-visibleLength)}`;
     }
+
 
     window.onload = function () {
         const explorerViewContent = document.getElementById("explorer-view-content");
