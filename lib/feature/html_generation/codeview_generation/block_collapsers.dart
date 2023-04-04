@@ -51,11 +51,11 @@ void addBlockCollapsers(String codeString, List<AstNode> blocks) {
   e.sort((Event a, Event b) => a.x - b.x);
 
   for (int i = 0; i < e.length; i++) {
-    var blockName = (blocks[e[i].i] is ClassDeclaration
-        ? (blocks[e[i].i] as ClassDeclaration).name.name
-        : "noName");
-    print(
-        "Event #${e[i].i}: ${e[i].type} : ${e[i].x} - block: $blockName : ${blocks[e[i].i]}");
+    // var blockName = (blocks[e[i].i] is ClassDeclaration
+    //     ? (blocks[e[i].i] as ClassDeclaration).name.name
+    //     : "noName");
+    // print(
+    //     "Event #${e[i].i}: ${e[i].type} : ${e[i].x} - block: $blockName : ${blocks[e[i].i]}");
     final b = (i == 0
         ? codeString.substring(0, e[i].x)
         : codeString.substring(e[i - 1].x, e[i].x));
