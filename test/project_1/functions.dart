@@ -2,6 +2,7 @@
 
 void helloWorld() {
   print("Hello world!");
+  print(add(1, 2));
 }
 
 // add more functions for testing

@@ -42,6 +42,12 @@ AstNode _findDeclaration(SimpleIdentifier idNode) {
       if (declId.name == idNode.name) {
         return declId;
       }
+    } else if (contextStack[i] is FunctionDeclaration) {
+      FunctionDeclaration decl = contextStack[i]; // down-casting
+      SimpleIdentifier declId = decl.name;
+      if (declId.name == idNode.name) {
+        return declId;
+      }
     }
   }
   return null;
@@ -59,6 +65,12 @@ List<AstNode> get allVarUsages {
 
 class NameResolveAndContextStackVisitor extends RecursiveAstVisitor {
   @override
+  void visitVariableDeclaration(VariableDeclaration node) {
+    contextStack.add(node);
+    super.visitVariableDeclaration(node);
+  }
+
+  @override
   visitSimpleFormalParameter(SimpleFormalParameter node) {
     final id = node.identifier;
     contextStack.add(id);
@@ -73,9 +85,22 @@ class NameResolveAndContextStackVisitor extends RecursiveAstVisitor {
   }
 
   @override
-  void visitVariableDeclaration(VariableDeclaration node) {
-    contextStack.add(node);
-    super.visitVariableDeclaration(node);
+  void visitFunctionDeclaration(FunctionDeclaration node) {
+    SimpleIdentifier id = node.name;
+    contextStack.add(id);
+    print("context stack after function declaration: $contextStack");
+    super.visitFunctionDeclaration(node);
+  }
+
+  // visit function calls
+  @override
+  void visitMethodInvocation(MethodInvocation node) {
+    // print("MethodInvocation: ${node.methodName}");
+    //connet with declaration
+    AstNode decl = _findDeclaration(node.methodName);
+    print("MethodInvocation: ${node.methodName} decl: ${decl}");
+    _connectUsageWithDeclaration(node.methodName, decl);
+    super.visitMethodInvocation(node);
   }
 
   @override
@@ -113,4 +138,5 @@ startAnalysis(AstNode root) {
   root.visitChildren(NameResolveAndContextStackVisitor());
   root.visitChildren(DocumentationCommentVisitor());
   blocks[currentFile] = blocksBuffer;
+  // print("comments: ${comments[currentFile]}");
 }

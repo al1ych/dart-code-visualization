@@ -33,6 +33,7 @@ String executePipeline(String codeString) {
   for (int i = keys.length - 1; i >= 0; i--) {
     final pos = keys[i];
     final ts = tags[currentFile][pos];
+    // if class doc then print
     for (int j = 0; j < ts.length; j++) {
       final t = ts[j];
       newCode = newCode.substring(0, pos) + t + newCode.substring(pos);
@@ -46,14 +47,11 @@ String codeviewPipeline(
   List<SimpleIdentifier> usages,
   List<AstNode> blocks,
 ) {
-  if (usages.isEmpty) {
-    return codeString;
-  }
-  String processedCode = codeString;
-  addBlockCollapsers(processedCode, blocks);
-  addDeclarationBinding(processedCode, usages);
-  addSimpleSyntaxHighlighting(processedCode);
-  return executePipeline(processedCode);
+  addBlockCollapsers(codeString, blocks);
+  addDocumentationTooltip(codeString, comments[currentFile]);
+  addDeclarationBinding(codeString, usages);
+  addSimpleSyntaxHighlighting(codeString);
+  return executePipeline(codeString);
 }
 
 String initializeCodeviewPipeline(String codeString, List<AstNode> nodes) {
