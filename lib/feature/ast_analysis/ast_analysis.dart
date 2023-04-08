@@ -64,11 +64,24 @@ List<AstNode> get allVarUsages {
 }
 
 class NameResolveAndContextStackVisitor extends RecursiveAstVisitor {
+  /////////////////////////////
+  /// Visiting Declarations
+
   @override
   void visitVariableDeclaration(VariableDeclaration node) {
     contextStack.add(node);
     super.visitVariableDeclaration(node);
   }
+
+  @override
+  void visitFunctionDeclaration(FunctionDeclaration node) {
+    SimpleIdentifier id = node.name;
+    contextStack.add(id);
+    super.visitFunctionDeclaration(node);
+  }
+
+  /////////////////////////////
+  /// Visiting Usages
 
   @override
   visitSimpleFormalParameter(SimpleFormalParameter node) {
@@ -85,23 +98,14 @@ class NameResolveAndContextStackVisitor extends RecursiveAstVisitor {
   }
 
   @override
-  void visitFunctionDeclaration(FunctionDeclaration node) {
-    SimpleIdentifier id = node.name;
-    contextStack.add(id);
-    print("context stack after function declaration: $contextStack");
-    super.visitFunctionDeclaration(node);
-  }
-
-  // visit function calls
-  @override
   void visitMethodInvocation(MethodInvocation node) {
-    // print("MethodInvocation: ${node.methodName}");
-    //connet with declaration
     AstNode decl = _findDeclaration(node.methodName);
-    print("MethodInvocation: ${node.methodName} decl: ${decl}");
     _connectUsageWithDeclaration(node.methodName, decl);
     super.visitMethodInvocation(node);
   }
+
+  /////////////////////////////
+  /// Forming block stack
 
   @override
   void visitBlock(Block block) {
@@ -120,14 +124,11 @@ class NameResolveAndContextStackVisitor extends RecursiveAstVisitor {
   @override
   void visitClassDeclaration(ClassDeclaration node) {
     print("ClassDeclaration: ${node}");
-
     // Open class block
     contextStack.add(node);
     blocksBuffer.add(node);
-
     // Proceed down the tree
     node.visitChildren(this);
-
     // Close class block
     contextStack.removeLast();
   }
@@ -138,5 +139,4 @@ startAnalysis(AstNode root) {
   root.visitChildren(NameResolveAndContextStackVisitor());
   root.visitChildren(DocumentationCommentVisitor());
   blocks[currentFile] = blocksBuffer;
-  // print("comments: ${comments[currentFile]}");
 }
