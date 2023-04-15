@@ -2,6 +2,16 @@
 
 part of '../../main.dart';
 
+List<AstNode> get allVarUsages {
+  List<AstNode> varUsages = [];
+  for (var p in jumpToDeclaration.entries) {
+    if (p.value != null) {
+      varUsages.add(p.key);
+    }
+  }
+  return varUsages;
+}
+
 List<AstNode> contextStack = [];
 Map<String, AstNode> topLevelDeclarations = {};
 List<AstNode> blocksBuffer = [];
@@ -60,16 +70,6 @@ AstNode _findDeclaration(SimpleIdentifier idNode) {
   }
 
   return null;
-}
-
-List<AstNode> get allVarUsages {
-  List<AstNode> varUsages = [];
-  for (var p in jumpToDeclaration.entries) {
-    if (p.value != null) {
-      varUsages.add(p.key);
-    }
-  }
-  return varUsages;
 }
 
 class ToppersVisitor extends GeneralizingAstVisitor {
