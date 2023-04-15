@@ -23,6 +23,7 @@ int someFunction2() {
 /* documentation */
 int someFunction3() {
   /// stuff
+  someFunction();
 }
 
 /**
@@ -36,4 +37,6 @@ int someFunction() {
   /**
    * documentation
    *  */
+  someFunction1();
+  someFunction2();
 }

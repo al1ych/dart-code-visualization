@@ -3,6 +3,7 @@
 part of '../../main.dart';
 
 List<AstNode> contextStack = [];
+Map<String, AstNode> topLevelDeclarations = {};
 List<AstNode> blocksBuffer = [];
 Map<String, List<AstNode>> blocks = {}; // blocks of particular file
 Map<SimpleIdentifier, AstNode> jumpToDeclaration = {};
@@ -10,6 +11,7 @@ Map<AstNode, List<SimpleIdentifier>> jumpToUsages = {};
 
 void _clearAnalysisState() {
   contextStack = [];
+  topLevelDeclarations = {};
   jumpToDeclaration = {};
   jumpToUsages = {};
   blocksBuffer = [];
@@ -50,6 +52,13 @@ AstNode _findDeclaration(SimpleIdentifier idNode) {
       }
     }
   }
+
+  if (topLevelDeclarations.containsKey(idNode.name)) {
+    print(
+        "found top-level declaration for ${idNode.name}: ${topLevelDeclarations[idNode.name]}");
+    return topLevelDeclarations[idNode.name];
+  }
+
   return null;
 }
 
@@ -63,23 +72,26 @@ List<AstNode> get allVarUsages {
   return varUsages;
 }
 
-class NameResolveAndContextStackVisitor extends RecursiveAstVisitor {
+class ToppersVisitor extends GeneralizingAstVisitor {
   /////////////////////////////
-  /// Visiting Declarations
+  /// Visiting top-level declarations
 
   @override
   void visitVariableDeclaration(VariableDeclaration node) {
-    contextStack.add(node);
+    SimpleIdentifier id = node.name;
+    topLevelDeclarations[id.name] = id;
     super.visitVariableDeclaration(node);
   }
 
   @override
   void visitFunctionDeclaration(FunctionDeclaration node) {
     SimpleIdentifier id = node.name;
-    contextStack.add(id);
+    topLevelDeclarations[id.name] = id;
     super.visitFunctionDeclaration(node);
   }
+}
 
+class NameResolveAndContextStackVisitor extends RecursiveAstVisitor {
   /////////////////////////////
   /// Visiting Usages
 
@@ -105,7 +117,33 @@ class NameResolveAndContextStackVisitor extends RecursiveAstVisitor {
   }
 
   /////////////////////////////
+  /// Visiting Declarations
+
+  @override
+  void visitVariableDeclaration(VariableDeclaration node) {
+    contextStack.add(node);
+    super.visitVariableDeclaration(node);
+  }
+
+  @override
+  void visitFunctionDeclaration(FunctionDeclaration node) {
+    SimpleIdentifier id = node.name;
+    contextStack.add(id);
+    print("added function declaration to context stack: $id");
+    super.visitFunctionDeclaration(node);
+  }
+
+  /////////////////////////////
   /// Forming block stack
+
+  // visit global, top-level block
+  @override
+  void visitCompilationUnit(CompilationUnit node) {
+    contextStack.add(node);
+    blocksBuffer.add(node);
+    node.visitChildren(this);
+    contextStack.removeLast();
+  }
 
   @override
   void visitBlock(Block block) {
@@ -136,6 +174,7 @@ class NameResolveAndContextStackVisitor extends RecursiveAstVisitor {
 
 startAnalysis(AstNode root) {
   _clearAnalysisState();
+  root.visitChildren(ToppersVisitor()); // collecting top-level entities first
   root.visitChildren(NameResolveAndContextStackVisitor());
   root.visitChildren(DocumentationCommentVisitor());
   blocks[currentFile] = blocksBuffer;

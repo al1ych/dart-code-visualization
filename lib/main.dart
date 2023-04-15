@@ -68,21 +68,25 @@ void main(List<String> args) {
 
   String ltPath = generateLayoutHTML(projectTitle, cvPaths);
 
-  print("DartBoard is ready! Opening ${ltPath.split('/').last}...");
-  if (Platform.isMacOS) {
-    Process.run('open', [ltPath]).then((result) {
-      stdout.write(result.stdout);
-      stderr.write(result.stderr);
-    });
-  } else if (Platform.isWindows) {
-    Process.run('start', [ltPath], runInShell: true).then((result) {
-      stdout.write(result.stdout);
-      stderr.write(result.stderr);
-    });
-  } else if (Platform.isLinux) {
-    Process.run('xdg-open', [ltPath]).then((result) {
-      stdout.write(result.stdout);
-      stderr.write(result.stderr);
-    });
+  print("DartBoard is ready!");
+  bool autorun = false;
+  if (autorun) {
+    print("Opening ${ltPath.split('/').last}...");
+    if (Platform.isMacOS) {
+      Process.run('open', [ltPath]).then((result) {
+        stdout.write(result.stdout);
+        stderr.write(result.stderr);
+      });
+    } else if (Platform.isWindows) {
+      Process.run('start', [ltPath], runInShell: true).then((result) {
+        stdout.write(result.stdout);
+        stderr.write(result.stderr);
+      });
+    } else if (Platform.isLinux) {
+      Process.run('xdg-open', [ltPath]).then((result) {
+        stdout.write(result.stdout);
+        stderr.write(result.stderr);
+      });
+    }
   }
 }
