@@ -12,6 +12,14 @@ List<AstNode> get allVarUsages {
   return varUsages;
 }
 
+AstNode getRootDeclaration(AstNode node) {
+  while (jumpToDeclaration[node] != null &&
+      jumpToDeclaration[node].offset != node.offset) {
+    node = jumpToDeclaration[node];
+  }
+  return node;
+}
+
 List<AstNode> contextStack = [];
 Map<String, AstNode> topLevelDeclarations = {};
 List<AstNode> blocksBuffer = [];

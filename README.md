@@ -20,9 +20,9 @@ This is how it works:
 - [x] Generate HTML files from source code in Dart
 - [x] Highlight syntax in the generated HTML
 - [x] Jump to declaration for a variable
-- [ ] Jump to declaration for a function
-- [ ] Jump to declaration for a class
+- [x] Jump to declaration for a function
 - [ ] Show documentation on cursor hover 👈🏻
+- [ ] Jump to declaration for a class
 - [ ] Show class specification/fields on hover
 - [x] Collapse block scopes
 - [x] Side-bar to switch between tabs with source files

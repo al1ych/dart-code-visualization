@@ -9,7 +9,7 @@ String _wrapUsage(String usage, int uPos, int dPos) {
 
 void addDeclarationBinding(String codeString, List<SimpleIdentifier> usages) {
   for (int i = 0; i < usages.length; i++) {
-    final declarationPos = _getRootDeclaration(usages[i]).offset;
+    final declarationPos = getRootDeclaration(usages[i]).offset;
 
     const classes = "class='variable-usage'";
     final events = "onclick='jumpTo($declarationPos)'";

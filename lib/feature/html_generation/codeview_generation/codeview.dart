@@ -14,16 +14,6 @@ String get codeviewTemplate {
   return staticTemplateContent;
 }
 
-AstNode _getRootDeclaration(AstNode node) {
-  // to-do: what is this function doing in this file?
-  // should refactor to the name_resolution file
-  while (jumpToDeclaration[node] != null &&
-      jumpToDeclaration[node].offset != node.offset) {
-    node = jumpToDeclaration[node];
-  }
-  return node;
-}
-
 String executePipeline(String codeString) {
   // sort tag keys
   final keys = tags[currentFile].keys.toList();
@@ -57,7 +47,7 @@ String codeviewPipeline(
 String initializeCodeviewPipeline(String codeString, List<AstNode> nodes) {
   List<SimpleIdentifier> usages = [];
   for (var node in nodes) {
-    AstNode dRoot = _getRootDeclaration(node); // get to the orig declaration
+    AstNode dRoot = getRootDeclaration(node); // get to the orig declaration
     usages.addAll(jumpToUsages[dRoot]); // add & flatten
   }
   usages.sort((a, b) => a.offset - b.offset); // sort by offset

@@ -18,10 +18,12 @@ void addDocumentationTooltip(
     // print(
     // "comment: ${comment.comment} at ${comment.offset} ends at ${comment.offset + comment.length}");
 
-    const events = "onmouseover='showTooltip(event)' "
-        "onmouseout='hideTooltip(event)' "
-        "onmousemove='moveTooltip(event)'";
     final id = "doc-${comment.offset}";
+    final docText = /* comment.comment but remove all \n chars */
+        comment.comment.replaceAll("\n", "\\n");
+    final events = ""
+        "onmousemove=\"showTooltip(event, '$id', '$docText')\" "
+        "onmouseout=\"hideTooltip(event, '$id', '$docText')\" ";
     final tagBegin = "<span id='$id' class='doc' $events>";
     const tagEnd = "</span>";
 
@@ -31,7 +33,8 @@ void addDocumentationTooltip(
     tags[currentFile].putIfAbsent(comment.offset + comment.length, () => []);
     tags[currentFile][comment.offset + comment.length].add(tagEnd);
 
-    // todo 1 : add function usage-declaration flow as well
-    // todo 2 : like with var usage-declaration, onmouseover=showTooltip(getRootDeclaration(for each entity))
+    // [x] todo 1 : add function usage-declaration flow as well
+    // [ ] todo   : повесить тег на каждый декларейшон что к нему относится конкретный коммент
+    // [ ] todo 2 : like with var usage-declaration, onmouseover=showTooltip(getRootDeclaration(for each entity))
   }
 }

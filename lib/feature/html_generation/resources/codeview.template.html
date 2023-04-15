@@ -23,7 +23,7 @@
         }
     }
 
-    code {
+    code, .tooltip {
         font-family: 'JetBrains Mono', 'Fira Code';
         font-size: 105%;
     }
@@ -93,9 +93,24 @@
         color: #6b8e23;
         background-color: transparent;
     }
+
+    .tooltip {
+        position: absolute;
+        background-color: #44444480;
+        backdrop-filter: blur(5px);
+        color: white;
+        padding: 0.4em;
+        border-radius: 0.5em;
+        opacity: 0;
+        z-index: 100;
+        font-size: smaller;
+    }
 </style>
 
 <script>
+    /////////////////////////
+    // Jumping to declarations
+
     function jumpTo(whereTo) {
         console.log(`Jumping to ${whereTo}`)
         document.getElementById(whereTo).classList.add("declaration-highlighted")
@@ -104,6 +119,9 @@
             document.getElementById(whereTo).classList.remove("declaration-highlighted")
         }, 3000)
     }
+
+    /////////////////////////
+    // Block Collapsing
 
     const collapseTimeout = 100;
     let canCollapse = true;
@@ -123,13 +141,13 @@
         // toggling mechanism:
         if (document.getElementById(blockId).classList.contains("collapsed")) {
             // then we want to unravel
-            console.log(`Unraveling ${blockId}!`)
+            console.log(`Unfolding ${blockId}!`)
             document.getElementById(blockId).classList.remove("collapsed")
             document.getElementById(blockId).innerHTML = collapseBuffer[blockId];
             _initiateCooldown(blockId)
         } else {
             // we want to collapse
-            console.log(`Collapsing ${blockId}!`)
+            console.log(`Folding ${blockId}!`)
             document.getElementById(blockId).classList.add("collapsed")
             collapseBuffer[blockId] = document.getElementById(blockId).innerHTML;
             document.getElementById(blockId).innerHTML = "...";
@@ -137,6 +155,43 @@
         }
     }
 
+    /////////////////////////
+    // Tooltip
+
+    function showTooltip(event, elementId, tooltipText) {
+        let tooltip = document.getElementById(`tooltip`);
+
+        console.log(`Showing tooltip for ${elementId}! ${tooltipText}`);
+
+        // visibility visible for tooltip
+        tooltip.style.opacity = "1";
+        // move tooltip to mouse coords
+        tooltip.style.left = event.clientX + "px";
+        tooltip.style.top = event.clientY + "px";
+        // set tooltip text
+        tooltip.innerHTML = tooltipText;
+
+    }
+
+    function hideTooltip(event, elementId) {
+        let tooltip = document.getElementById(`tooltip`);
+        // opacity 0 for tooltip
+        tooltip.style.opacity = "0";
+    }
+
+    function createTooltip(){
+        let tooltip = document.createElement("div");
+        tooltip.innerHTML = "<tooltip>";
+        tooltip.classList.add("tooltip");
+        tooltip.id = `tooltip`;
+        document.body.appendChild(tooltip);
+    }
+
+    /////////////////////////
+    // Window Setup
+    window.onload = () => {
+        createTooltip();
+    }
 </script>
 
 <!-- <pre><code>$codeString</code></pre> -->
