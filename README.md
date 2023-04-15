@@ -21,7 +21,7 @@ This is how it works:
 - [x] Highlight syntax in the generated HTML
 - [x] Jump to declaration for a variable
 - [x] Jump to declaration for a function
-- [ ] Show documentation on cursor hover 👈🏻
+- [ ] Show documentation on cursor hover (todo: on entity usage hover) 👈🏻
 - [ ] Jump to declaration for a class
 - [ ] Show class specification/fields on hover
 - [x] Collapse block scopes
@@ -31,6 +31,7 @@ This is how it works:
 
 ### Medium priority
 
+- [ ] Build archive for export
 - [ ] Search by regex expression
 - [ ] Upload zip project
 - [ ] Upload via github repo

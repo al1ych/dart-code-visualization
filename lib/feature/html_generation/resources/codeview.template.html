@@ -101,7 +101,7 @@
         color: white;
         padding: 0.4em;
         border-radius: 0.5em;
-        opacity: 0;
+        visibility: hidden;
         z-index: 100;
         font-size: smaller;
     }
@@ -160,11 +160,9 @@
 
     function showTooltip(event, elementId, tooltipText) {
         let tooltip = document.getElementById(`tooltip`);
-
         console.log(`Showing tooltip for ${elementId}! ${tooltipText}`);
-
         // visibility visible for tooltip
-        tooltip.style.opacity = "1";
+        tooltip.style.visibility = "visible";
         // move tooltip to mouse coords
         tooltip.style.left = event.clientX + "px";
         tooltip.style.top = event.clientY + "px";
@@ -175,8 +173,7 @@
 
     function hideTooltip(event, elementId) {
         let tooltip = document.getElementById(`tooltip`);
-        // opacity 0 for tooltip
-        tooltip.style.opacity = "0";
+        tooltip.style.visibility = "hidden";
     }
 
     function createTooltip(){
