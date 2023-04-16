@@ -37,9 +37,10 @@ String codeviewPipeline(
   List<SimpleIdentifier> usages,
   List<AstNode> blocks,
 ) {
+  // decl binding goes before documentation tooltip
   addBlockCollapsers(codeString, blocks);
-  addDocumentationTooltip(codeString, comments[currentFile]);
   addDeclarationBinding(codeString, usages);
+  addDocumentationTooltip(codeString, comments[currentFile], usages);
   addSimpleSyntaxHighlighting(codeString);
   return executePipeline(codeString);
 }

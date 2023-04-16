@@ -14,20 +14,27 @@ Map<String, List<DocumentationEntity>> comments = {}; // {file->{entity->docs}}
 
 class DocumentationCommentVisitor extends RecursiveAstVisitor<void> {
   void handleAnnotatedNode(AnnotatedNode node) {
-    // Extract the documentation comment, if any
     final documentationComment = node.documentationComment;
     if (documentationComment != null) {
-      final String content =
-          documentationComment.tokens.map((t) => t.toString()).join('\n');
+      final String content = documentationComment.tokens
+          .map(
+            (t) => t.toString(),
+          )
+          .join('\n');
       final comment = DocumentationEntity(
-          content, documentationComment.offset, documentationComment.length);
-      // print("comment node: ${node.documentationComment.offset}");
-      // print("comment node: ${node.documentationComment.length}");
+        content,
+        documentationComment.offset,
+        documentationComment.length,
+      );
       if (comments[currentFile] == null) {
         comments[currentFile] = [];
       }
       comments[currentFile].add(comment);
-      // print('Node: ${node.runtimeType}\nDocumentation Comment:\n$content\n');
+
+      if (node is FunctionDeclaration) {
+        SimpleIdentifier functionName = node.name;
+        commentById["doc-${functionName.offset}"] = comment.comment;
+      }
     }
   }
 

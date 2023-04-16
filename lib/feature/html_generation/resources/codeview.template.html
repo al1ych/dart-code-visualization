@@ -101,7 +101,7 @@
         color: white;
         padding: 0.4em;
         border-radius: 0.5em;
-        visibility: hidden;
+        /* visibility: hidden; */
         z-index: 100;
         font-size: smaller;
     }
@@ -164,11 +164,14 @@
         // visibility visible for tooltip
         tooltip.style.visibility = "visible";
         // move tooltip to mouse coords
-        tooltip.style.left = event.clientX + "px";
-        tooltip.style.top = event.clientY + "px";
+        tooltip.style.left = (event.clientX + 16) + "px";
+        tooltip.style.top = (event.clientY + 8) + "px";
         // set tooltip text
         tooltip.innerHTML = tooltipText;
-
+        
+        if (tooltipText == "") {
+            tooltip.style.visibility = "hidden";
+        }
     }
 
     function hideTooltip(event, elementId) {
