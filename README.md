@@ -21,7 +21,10 @@ This is how it works:
 - [x] Highlight syntax in the generated HTML
 - [x] Jump to declaration for a variable
 - [x] Jump to declaration for a function
-- [x--] Show documentation on cursor hover (todo: on ~~var~~/function/class usage hover) 👈🏻
+- [ - x - ] Show documentation on cursor hover (todo: on var/~~function~~/class usage hover) 👈🏻
+
+todo: наводим на var-usage кастомного класса X -- показываем тултип с докой класса X + ClassDescription (филды + методы)
+
 - [ ] Jump to declaration for a class
 - [ ] Show class specification/fields on hover
 - [x] Collapse block scopes

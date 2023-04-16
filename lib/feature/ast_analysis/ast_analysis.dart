@@ -72,8 +72,8 @@ AstNode _findDeclaration(SimpleIdentifier idNode) {
   }
 
   if (topLevelDeclarations.containsKey(idNode.name)) {
-    print(
-        "found top-level declaration for ${idNode.name}: ${topLevelDeclarations[idNode.name]}");
+    // print(
+    //     "found top-level declaration for ${idNode.name}: ${topLevelDeclarations[idNode.name]}");
     return topLevelDeclarations[idNode.name];
   }
 
@@ -137,7 +137,7 @@ class NameResolveAndContextStackVisitor extends RecursiveAstVisitor {
   void visitFunctionDeclaration(FunctionDeclaration node) {
     SimpleIdentifier id = node.name;
     contextStack.add(id);
-    print("added function declaration to context stack: $id");
+    // print("added function declaration to context stack: $id");
     super.visitFunctionDeclaration(node);
   }
 
@@ -184,6 +184,7 @@ startAnalysis(AstNode root) {
   _clearAnalysisState();
   root.visitChildren(ToppersVisitor()); // collecting top-level entities first
   root.visitChildren(NameResolveAndContextStackVisitor());
+  root.visitChildren(ClassInfoVisitor());
   root.visitChildren(DocumentationCommentVisitor());
   blocks[currentFile] = blocksBuffer;
 }
