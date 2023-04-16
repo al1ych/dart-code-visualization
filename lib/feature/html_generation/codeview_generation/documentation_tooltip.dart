@@ -37,11 +37,6 @@ void addDocumentationTooltip(
     final declarationPos = rootDeclaration.offset;
     final declarationId = "doc-$declarationPos";
 
-    // print("usage: ${usages[i].offset} | "
-    //     "declaration: ${declarationId} | "
-    //     "comment: ${commentById[declarationId]}");
-    // print("for usage ${usages[i]} : comment -> ${commentById[declarationId]}");
-
     const classes = "";
     final docText = ""
         "${commentById[declarationId] ?? ''}";
