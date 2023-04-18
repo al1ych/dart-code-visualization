@@ -6,6 +6,51 @@ part of '../../../main.dart';
 
 Map<String, String> commentById = {};
 
+bool isBuiltIn(String type) {
+  return const [
+    "int",
+    "double",
+    "num",
+    "bool",
+    "String",
+    "List",
+    "Map",
+    "Set",
+    "Iterable",
+    "Future",
+    "Stream",
+    "Object",
+    "Function",
+    "Null",
+    "null",
+    "Type",
+    "Symbol",
+    "DateTime",
+    "Duration",
+    "Uri",
+    "RegExp",
+    "StackTrace",
+    "IterableMixin",
+    "ListMixin",
+    "SetMixin",
+    "MapMixin",
+    "Queue",
+    "LinkedList",
+    "LinkedListEntry",
+    "SplayTreeSet",
+    "SplayTreeMap",
+    "Runes",
+    "Comparator",
+    "Invocation",
+    "Expando",
+    "Endian",
+    "UnmodifiableListView",
+    "UnmodifiableListMixin",
+    "UnmodifiableMapView",
+    "UnmodifiableSetView",
+  ].contains(type);
+}
+
 void addDocumentationTooltip(
   String codeString,
   List<DocumentationEntity> comments,
@@ -15,14 +60,17 @@ void addDocumentationTooltip(
     return;
   }
 
+  const separator = "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~<br/>";
+
   for (var comment in comments) {
     final id = "doc-${comment.offset}";
-    final docText = /* comment.comment but remove all \n chars */
-        comment.comment.replaceAll("\n", "\\n");
-    final events = ""
-        "onmousemove=\"showTooltip(event, '$id', '$docText')\" "
-        "onmouseout=\"hideTooltip(event, '$id', '$docText')\" ";
-    final tagBegin = "<span id='$id' class='doc' $events>";
+    String docText = comment.comment;
+    docText = docText.replaceAll("\n", "<br/>");
+    final onmousemove =
+        "onmousemove=\"showTooltip(event, '$id', '$docText')\" ";
+    const onmouseout = "onmouseout=\"hideTooltip()\" ";
+
+    final tagBegin = "<span id='$id' class='doc' $onmousemove $onmouseout>";
     const tagEnd = "</span>";
 
     tags[currentFile].putIfAbsent(comment.offset, () => []);
@@ -37,15 +85,44 @@ void addDocumentationTooltip(
     final declarationPos = rootDeclaration.offset;
     final declarationId = "doc-$declarationPos";
 
+    // print("usage: ${usages[i].name} -> $rootDeclaration");
+
+    String docText = "";
+    var n = rootDeclaration;
+    int times = 2;
+    while (times != 0 && n != null && n is! ClassDeclaration) {
+      n = n.parent;
+      times--;
+    }
+    if (n is ClassDeclaration) {
+      docText += classDecription[n].toString();
+    }
+
+    AstNode parent = rootDeclaration.parent;
+    if (parent is VariableDeclaration) {
+      TypeName typeName = (parent.parent as VariableDeclarationList).type;
+      String variableName = usages[i].name;
+
+      if (typeName != null && !isBuiltIn(typeName.name.name)) {
+        docText += "Type: ${typeName.name.name}\n";
+        docText += separator;
+        ClassDeclaration node = classNameToDeclaration[typeName.name.name];
+        if (node != null) {
+          docText += classDecription[node].toString();
+        }
+      }
+    }
+
+    docText += commentById[declarationId] ?? '';
+    docText = docText.replaceAll("\n", "<br/>");
+
     const classes = "";
-    final docText = ""
-        "${commentById[declarationId] ?? ''}";
-    final events = ""
-        "onmousemove=\"showTooltip(event, '$declarationId', '$docText')\" "
-        "onmouseout=\"hideTooltip(event, '$declarationId', '$docText')\" ";
+    final onmousemove =
+        "onmousemove=\"showTooltip(event, '$declarationId', '$docText')\" ";
+    const onmouseout = "onmouseout=\"hideTooltip()\" ";
     final usagePos = usages[i].offset;
 
-    final tag1 = "<span $classes $events>";
+    final tag1 = "<span $classes $onmousemove $onmouseout>";
     const tag2 = "</span>";
 
     tags[currentFile].putIfAbsent(usagePos, () => []);

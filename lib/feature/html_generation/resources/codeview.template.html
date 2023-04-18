@@ -101,9 +101,9 @@
         color: white;
         padding: 0.4em;
         border-radius: 0.5em;
-        visibility: hidden;
         z-index: 100;
         font-size: smaller;
+        visibility: hidden;
     }
 </style>
 
@@ -162,21 +162,19 @@
         let tooltip = document.getElementById(`tooltip`);
         console.log(`Showing tooltip for ${elementId}! ${tooltipText}`);
         // visibility visible for tooltip
-        tooltip.style.visibility = "visible";
-        // move tooltip to mouse coords
-        tooltip.style.left = (event.clientX + 16) + "px";
-        tooltip.style.top = (event.clientY + 8) + "px";
+        if (tooltipText != "") tooltip.style.visibility = "visible";
+        // move tooltip to mouse coords + scroll position
+        tooltip.style.left = (event.clientX + window.pageXOffset + 16) + "px";
+        tooltip.style.top = (event.clientY + window.pageYOffset + 8) + "px";
         // set tooltip text
         tooltip.innerHTML = tooltipText;
-        
-        if (tooltipText == "") {
-            tooltip.style.visibility = "hidden";
-        }
     }
 
-    function hideTooltip(event, elementId) {
+
+    function hideTooltip() {
         let tooltip = document.getElementById(`tooltip`);
         tooltip.style.visibility = "hidden";
+        console.log("Hiding tooltip!");
     }
 
     function createTooltip(){

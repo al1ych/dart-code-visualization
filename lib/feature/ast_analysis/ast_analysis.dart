@@ -68,12 +68,16 @@ AstNode _findDeclaration(SimpleIdentifier idNode) {
       if (declId.name == idNode.name) {
         return declId;
       }
+    } else if (contextStack[i] is ClassDeclaration) {
+      ClassDeclaration decl = contextStack[i]; // down-casting
+      SimpleIdentifier declId = decl.name;
+      if (declId.name == idNode.name) {
+        return declId;
+      }
     }
   }
 
   if (topLevelDeclarations.containsKey(idNode.name)) {
-    // print(
-    //     "found top-level declaration for ${idNode.name}: ${topLevelDeclarations[idNode.name]}");
     return topLevelDeclarations[idNode.name];
   }
 
@@ -169,7 +173,6 @@ class NameResolveAndContextStackVisitor extends RecursiveAstVisitor {
 
   @override
   void visitClassDeclaration(ClassDeclaration node) {
-    print("ClassDeclaration: ${node}");
     // Open class block
     contextStack.add(node);
     blocksBuffer.add(node);
@@ -184,6 +187,8 @@ startAnalysis(AstNode root) {
   _clearAnalysisState();
   root.visitChildren(ToppersVisitor()); // collecting top-level entities first
   root.visitChildren(NameResolveAndContextStackVisitor());
+  root.visitChildren(
+      ClassNameToDeclarationVisitor()); // collect class names first
   root.visitChildren(ClassInfoVisitor());
   root.visitChildren(DocumentationCommentVisitor());
   blocks[currentFile] = blocksBuffer;

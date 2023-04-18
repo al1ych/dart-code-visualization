@@ -63,7 +63,7 @@ void addBlockCollapsers(String codeString, List<AstNode> blocks) {
       String content = b;
       final id = "block-${e[i].i}";
       const classes = "block";
-      final events = "oncontextmenu='collapse(`$id`)'";
+      final events = "oncontextmenu=\"collapse('$id')\"";
       final tag = "<span id='$id' class='$classes' $events>";
       tags[currentFile].putIfAbsent(e[i].x, () => []);
       tags[currentFile][e[i].x].add(tag);

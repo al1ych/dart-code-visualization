@@ -59,11 +59,13 @@ class SyntaxHighlighting {
     "implements",
     "static",
     "class",
+    "@override",
   ];
 
   static const List<String> dataTypes = [
     "void",
     "int",
+    "double",
     "String",
     "dynamic",
     "enum",
@@ -79,8 +81,9 @@ class SyntaxHighlighting {
         RegExp(r'\".*\"(?<!\/\/.*)'): "quote",
         RegExp(r"\/\/.*"): "comment",
         RegExp(r"\/\*[\s\S]*?\*\/"): "comment",
-        // RegExp(r"\b(0[xX][a-fA-F0-9]+|\d+)(?<!\/\/.*)\b"): "literal",
-        RegExp(r"\b(" + keywords.join("|") + r")\b(?<!\/\/.*)"): "keyword",
+        RegExp(r"@[A-Za-z]+\b|(?<!@)\b(" +
+            keywords.join("|") +
+            r")\b(?<!\/\/.*)"): "keyword",
         RegExp(r"\b(" + dataTypes.join("|") + r")\b(?<!\/\/.*)"): "data-type",
       };
 }

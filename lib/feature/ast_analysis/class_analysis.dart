@@ -2,6 +2,8 @@
 
 part of '../../main.dart';
 
+Map<AstNode, ClassInfo> classDecription = {};
+
 class ClassInfo {
   String name;
   String modifiers;
@@ -22,17 +24,32 @@ class ClassInfo {
     this.methodNames,
     this.constructorNames,
   });
+
+  @override
+  String toString() {
+    List<String> output = [
+      // '--------------------------------------------------',
+      '> Class name: $name',
+      if (modifiers.isNotEmpty) '> Modifiers: $modifiers',
+      if (extendedClass.isNotEmpty) '> Extended class: $extendedClass',
+      if (implementedInterfaces.isNotEmpty)
+        '> Implemented interfaces: $implementedInterfaces',
+      if (mixins.isNotEmpty) '> Mixins: $mixins',
+      if (fieldNames.isNotEmpty) '> Field names: $fieldNames',
+      if (methodNames.isNotEmpty) '> Method names: $methodNames',
+      if (constructorNames.isNotEmpty) '> Constructor names: $constructorNames',
+      // '--------------------------------------------------',
+    ];
+    return output.join('\n');
+  }
 }
 
 class ClassInfoVisitor extends RecursiveAstVisitor<void> {
-  List<ClassInfo> classInfos = [];
-
   String getModifiers(ClassDeclaration node) {
     List<String> modifierKeywords = [];
     if (node.isAbstract) {
       modifierKeywords.add('abstract');
     }
-    // Add other modifiers as needed
     return modifierKeywords.join(' ');
   }
 
@@ -84,7 +101,7 @@ class ClassInfoVisitor extends RecursiveAstVisitor<void> {
       }
     });
 
-    classInfos.add(ClassInfo(
+    classDecription[node] = ClassInfo(
       name: className,
       modifiers: modifiers,
       extendedClass: extendedClass,
@@ -93,22 +110,24 @@ class ClassInfoVisitor extends RecursiveAstVisitor<void> {
       fieldNames: fieldNames,
       methodNames: methodNames,
       constructorNames: constructorNames,
-    ));
+    );
 
-    // print out classInfo for each class
-    for (ClassInfo classInfo in classInfos) {
-      print("--------------------------------------------------");
-      print('Class name: ${classInfo.name}');
-      print('Modifiers: ${classInfo.modifiers}');
-      print('Extended class: ${classInfo.extendedClass}');
-      print('Implemented interfaces: ${classInfo.implementedInterfaces}');
-      print('Mixins: ${classInfo.mixins}');
-      print('Field names: ${classInfo.fieldNames}');
-      print('Method names: ${classInfo.methodNames}');
-      print('Constructor names: ${classInfo.constructorNames}');
-      print("--------------------------------------------------");
-    }
+    // for (ClassInfo classInfo in classDecription.values) {
+    //   print("--------------------");
+    //   print(classInfo);
+    //   print("--------------------");
+    // }
 
+    super.visitClassDeclaration(node);
+  }
+}
+
+Map<String, ClassDeclaration> classNameToDeclaration = {};
+
+class ClassNameToDeclarationVisitor extends RecursiveAstVisitor<void> {
+  @override
+  void visitClassDeclaration(ClassDeclaration node) {
+    classNameToDeclaration[node.name.name] = node;
     super.visitClassDeclaration(node);
   }
 }
