@@ -17,6 +17,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.39.17"
+  archive:
+    dependency: "direct main"
+    description:
+      name: archive
+      sha256: f06332efd7b0886705a929c5d3b52cda4d6d0979627c1dbe9a18fc24becf50ae
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.13"
   args:
     dependency: transitive
     description:
@@ -236,7 +244,7 @@ packages:
     source: hosted
     version: "1.9.3"
   path:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: path
       sha256: db9d4f58c908a4ba5953fcee2ae317c94889433e5024c27ce74a37f94267945b

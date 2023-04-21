@@ -4,6 +4,10 @@
 
 import 'dart:io';
 
+import 'package:archive/archive.dart';
+import 'package:archive/archive_io.dart';
+import 'package:path/path.dart' as p;
+
 import 'package:analyzer/dart/analysis/utilities.dart';
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/ast/visitor.dart';
@@ -37,6 +41,8 @@ void main(List<String> args) {
   }
 
   String layoutPath = generateLayoutHTML(projectTitle, codeviewPaths);
+
+  packArchive(projectTitle);
 
   print("DartBoard is ready!");
   bool autorun = false;
@@ -97,4 +103,28 @@ void openGeneratedOutput(String layoutPath) {
   } else if (Platform.isLinux) {
     Process.run('xdg-open', [layoutPath]).then((r) => consoleLog(r));
   }
+}
+
+void packArchive(String projectTitle) {
+  Directory buildDir = Directory('../build');
+
+  if (!buildDir.existsSync()) {
+    print("The 'build' directory does not exist.");
+    return;
+  }
+
+  List<int> bytes = ZipEncoder().encode(Archive()
+    ..files.addAll(
+      buildDir.listSync(recursive: true).where((entity) => entity is File).map(
+            (file) => ArchiveFile(
+              p.relative(file.path, from: buildDir.path),
+              (file as File).lengthSync(),
+              (file as File).readAsBytesSync(),
+            ),
+          ),
+    ));
+
+  String archivePath = p.join(buildDir.path, '$projectTitle.zip');
+  File(archivePath).writeAsBytesSync(bytes);
+  print('Archive created: $archivePath');
 }
