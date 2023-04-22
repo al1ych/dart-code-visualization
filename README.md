@@ -28,10 +28,11 @@ This is how it works:
 - [x] Side-bar to switch between tabs with source files
 - [x] Project tree
 - [x] Upload the source files of the input project
+- [ ] Modular scoping
 
 ### Medium priority
 
-- [ ] Build archive for export
+- [x] Build archive for export
 - [ ] Search by regex expression
 - [ ] Upload zip project
 - [ ] Upload via github repo
