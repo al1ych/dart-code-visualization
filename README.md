@@ -29,6 +29,7 @@ This is how it works:
 - [x] Project tree
 - [x] Upload the source files of the input project
 - [ ] Modular scoping 🔨
+- [ ] Show List of usages of a decl and jump
 
 ### Medium priority
 
