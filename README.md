@@ -37,9 +37,9 @@ This is how it works:
 - [ ] Search by regex expression
 - [ ] Upload zip project
 - [ ] Upload via github repo
+- [ ] Show Static analysis results on 'dart analyze'
 - [ ] Gray out vars and functions that are not used
 - [ ] Gray out parts of code that are inaccessible
-
 
 ### Low priority
 
