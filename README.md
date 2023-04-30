@@ -33,7 +33,7 @@ This is how it works:
 - [x] Side-bar to switch between tabs with source files
 - [x] Project tree
 - [x] Upload the source files of the input project
-- [x] Modular scoping 🔨 -> comments&annotations, ~~classes~~, ~~functions~~, ~~variables~~
+- [x] Modular scoping
 - [ ] Show List of usages of a decl and jump
 
 ### Medium priority
