@@ -105,9 +105,73 @@
         font-size: smaller;
         visibility: hidden;
     }
+
+    .search-match {
+        background-color: #fca05e;
+        color: white;
+    }
+
+    #code-section {
+        display: block;
+    }
+
+    #original-code-section {
+        display: none; 
+    }
 </style>
 
 <script>
+
+    /////////////////////////
+    // Search
+
+    window.searchMode = false;
+
+    function setSearchMode(val) {
+        if (val === true) {
+            window.searchMode = true;
+            // #code-section should be invisible and #original-code-section should be visible
+            document.getElementById("code-section").style.display = "none";
+            document.getElementById("original-code-section").style.display = "block";
+        } else {
+            window.searchMode = false;
+            // #code-section should be visible and #original-code-section should be invisible
+            document.getElementById("code-section").style.display = "block";
+            document.getElementById("original-code-section").style.display = "none";
+            document.getElementById("original-code-section").innerHTML = originalCodeSnapshot; // reset to original
+        }
+    }
+
+    let originalCodeSnapshot = "";
+
+    function handleSearchResult(searchQuery) {
+        const originalCode = document.getElementById("original-code-section").innerText;
+
+        if (searchQuery) {
+            setSearchMode(true);
+            setTimeout(() => { setSearchMode(false); }, 5000);
+
+            console.log("handling search result...", originalCode);
+            const searchRegex = new RegExp(searchQuery, 'g');
+            const matches = originalCode.match(searchRegex);
+            const matchPositions = [...originalCode.matchAll(searchRegex)].map(m => m.index);
+
+            let codeSnapshot = originalCode;
+
+            for (let m of matchPositions.reverse()) {
+                console.log("match", m);
+                // добавить на месте матча теги в code
+                codeSnapshot =  codeSnapshot.slice(0, m) +
+                        '<span class="search-match">' +
+                        codeSnapshot.slice(m, m + searchQuery.length) +
+                        '</span>' + codeSnapshot.slice(m + searchQuery.length);
+            }
+
+            console.log("new code", codeSnapshot);
+            document.getElementById("original-code-section").innerHTML = codeSnapshot;
+        }
+    }
+
 
     /////////////////////////
     // Inter-iframe communication
@@ -128,11 +192,21 @@
             console.log("Received insta-jump from parent!", event.data.hash);
             jumpTo(event.data.hash);
         }
+        if (event.data.type == "search") {
+            console.log("Received search from parent!", event.data.searchQuery);
+            handleSearchResult(event.data.searchQuery);
+        }
     });
 
     function requestSelectFile(fileId, hash) {
         window.parent.postMessage({ type: 'selectFile', fileId, hash }, '*');
     }
+
+    // function sendMyCode() {
+    //     const originalCode = document.getElementById("original-code-section").innerText;
+    //     console.log("original code element: ", originalCode);
+    //     window.parent.postMessage({ type: 'code', code: originalCode }, '*');
+    // }
 
     /////////////////////////
     // Jumping to declarations
@@ -166,17 +240,6 @@
             }, 3000);
         }
     }
-
-    /*
-const files = [{name: 'functions.dart', uri: '/Users/tanugayev/dev/dart-code-visualization/lib/../build/html/functions.dart.codeview.html'},
-{name: 'test_hoisting.dart', uri: '/Users/tanugayev/dev/dart-code-visualization/lib/../build/html/test_hoisting.dart.codeview.html'},
-{name: 'folder/test_class_usage.dart', uri: '/Users/tanugayev/dev/dart-code-visualization/lib/../build/html/folder/test_class_usage.dart.codeview.html'},
-{name: 'folder/test_class.dart', uri: '/Users/tanugayev/dev/dart-code-visualization/lib/../build/html/folder/test_class.dart.codeview.html'},
-{name: 'folder/program_1.dart', uri: '/Users/tanugayev/dev/dart-code-visualization/lib/../build/html/folder/program_1.dart.codeview.html'},
-{name: 'main.dart', uri: '/Users/tanugayev/dev/dart-code-visualization/lib/../build/html/main.dart.codeview.html'},
-{name: 'classes.dart', uri: '/Users/tanugayev/dev/dart-code-visualization/lib/../build/html/classes.dart.codeview.html'},
-{name: 'long_file.dart', uri: '/Users/tanugayev/dev/dart-code-visualization/lib/../build/html/long_file.dart.codeview.html'}]
-*/
 
     /////////////////////////
     // Block Collapsing
@@ -246,6 +309,7 @@ const files = [{name: 'functions.dart', uri: '/Users/tanugayev/dev/dart-code-vis
     /////////////////////////
     // Window Setup
     window.onload = () => {
+        originalCodeSnapshot = document.getElementById("original-code-section").innerText;
         createTooltip();
     }
 </script>

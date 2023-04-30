@@ -45,5 +45,24 @@ String generateLayoutHTML(
   var html = getLayoutHTML(filePaths);
   File file = File(path);
   file.writeAsStringSync(html);
+
+  // add the static files from resources folder
+  // print("Copying static files...");
+  // Directory dir = Directory(
+  //   "${Directory.current.path}/feature/html_generation/resources/static/fonts",
+  // );
+  // print("directory: ${dir}");
+  // dir.listSync(recursive: true).forEach((element) {
+  //   if (element is File) {
+  //     File file = File(element.path);
+  //     String content = file.readAsStringSync();
+  //     String newPath = element.path.replaceAll(
+  //         "feature/html_generation/resources/static/fonts", "build/html");
+  //     File newFile = File(newPath);
+  //     newFile.createSync(recursive: true);
+  //     newFile.writeAsStringSync(content);
+  //   }
+  // });
+
   return path;
 }

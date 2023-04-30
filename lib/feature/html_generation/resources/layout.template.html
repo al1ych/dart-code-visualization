@@ -1,77 +1,21 @@
 <style>
 
-    @font-face {
-    font-family: 'JetBrains Mono';
-    src: url('https://cdn.jsdelivr.net/gh/JetBrains/JetBrainsMono/web/woff2/JetBrainsMono-Bold-Italic.woff2') format('woff2'),
-        url('https://cdn.jsdelivr.net/gh/JetBrains/JetBrainsMono/web/woff/JetBrainsMono-Bold-Italic.woff') format('woff');
-    font-weight: 700;
-    font-style: italic;
-    font-display: swap;
-    }
+    @import url("https://cdn.jsdelivr.net/gh/tonsky/FiraCode@1.207/distr/fira_code.css");
+    @import url("https://dev-cats.github.io/code-snippets/JetBrainsMono.css");
 
-    @font-face {
-    font-family: 'JetBrains Mono';
-    src: url('https://cdn.jsdelivr.net/gh/JetBrains/JetBrainsMono/web/woff2/JetBrainsMono-Bold.woff2') format('woff2'),
-        url('https://cdn.jsdelivr.net/gh/JetBrains/JetBrainsMono/web/woff/JetBrainsMono-Bold.woff') format('woff');
-    font-weight: 700;
-    font-style: normal;
-    font-display: swap;
-    }
+    /* @font-face {
+        font-family: 'JetBrains Mono';
+        src: url('fonts/JetBrainsMono-Bold-Italic.woff2') format('woff2'),
+            url('fonts/JetBrainsMono-Bold-Italic.woff') format('woff');
+        font-weight: 700;
+        font-style: italic;
+        font-display: swap;
+    } */
+  
+    /* body {
+        font-family: 'JetBrains Mono', monospace;
+    } */
 
-    @font-face {
-    font-family: 'JetBrains Mono';
-    src: url('https://cdn.jsdelivr.net/gh/JetBrains/JetBrainsMono/web/woff2/JetBrainsMono-ExtraBold-Italic.woff2') format('woff2'),
-        url('https://cdn.jsdelivr.net/gh/JetBrains/JetBrainsMono/web/woff/JetBrainsMono-ExtraBold-Italic.woff') format('woff');
-    font-weight: 800;
-    font-style: italic;
-    font-display: swap;
-    }
-
-    @font-face {
-    font-family: 'JetBrains Mono';
-    src: url('https://cdn.jsdelivr.net/gh/JetBrains/JetBrainsMono/web/woff2/JetBrainsMono-ExtraBold.woff2') format('woff2'),
-        url('https://cdn.jsdelivr.net/gh/JetBrains/JetBrainsMono/web/woff/JetBrainsMono-ExtraBold.woff') format('woff');
-    font-weight: 800;
-    font-style: normal;
-    font-display: swap;
-    }
-
-    @font-face {
-    font-family: 'JetBrains Mono';
-    src: url('https://cdn.jsdelivr.net/gh/JetBrains/JetBrainsMono/web/woff2/JetBrainsMono-Italic.woff2') format('woff2'),
-        url('https://cdn.jsdelivr.net/gh/JetBrains/JetBrainsMono/web/woff/JetBrainsMono-Italic.woff') format('woff');
-    font-weight: 400;
-    font-style: italic;
-    font-display: swap;
-    }
-
-    @font-face {
-    font-family: 'JetBrains Mono';
-    src: url('https://cdn.jsdelivr.net/gh/JetBrains/JetBrainsMono/web/woff2/JetBrainsMono-Medium-Italic.woff2') format('woff2'),
-        url('https://cdn.jsdelivr.net/gh/JetBrains/JetBrainsMono/web/woff/JetBrainsMono-Medium-Italic.woff') format('woff');
-    font-weight: 500;
-    font-style: italic;
-    font-display: swap;
-    }
-
-    @font-face {
-    font-family: 'JetBrains Mono';
-    src: url('https://cdn.jsdelivr.net/gh/JetBrains/JetBrainsMono/web/woff2/JetBrainsMono-Medium.woff2') format('woff2'),
-        url('https://cdn.jsdelivr.net/gh/JetBrains/JetBrainsMono/web/woff/JetBrainsMono-Medium.woff') format('woff');
-    font-weight: 500;
-    font-style: normal;
-    font-display: swap;
-    }
-
-    @font-face {
-    font-family: 'JetBrains Mono';
-    src: url('https://cdn.jsdelivr.net/gh/JetBrains/JetBrainsMono/web/woff2/JetBrainsMono-Regular.woff2') format('woff2'),
-        url('https://cdn.jsdelivr.net/gh/JetBrains/JetBrainsMono/web/woff/JetBrainsMono-Regular.woff') format('woff');
-    font-weight: 400;
-    font-style: normal;
-    font-display: swap;
-    }
-    
     * {
         border-radius: 0.5em;
     }
@@ -83,7 +27,7 @@
         margin-left: 8px;
         margin-top: 8px;
     }
-    
+
     /* style grid */
     .grid {
         margin-right: 4px;
@@ -112,6 +56,23 @@
         border: 1px solid #929292;
         /* border: none; */
     }
+
+    #header-container {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        margin: 0.5rem;
+        height: 2rem;
+    }
+
+    #search {
+
+    }
+
+    #searchframe {
+        display: none;
+    }
 </style>
 
 <body>
@@ -120,8 +81,8 @@
         src="https://github.com/al1ych/dart-code-visualization/raw/master/logo.png"
     /> -->
     <script>
-        window.addEventListener('message', receiveEvent);
 
+        window.addEventListener('message', receiveEvent);
         /// receive event from codeview iframe
         function receiveEvent(event) {
             if (event.data.type === 'selectFile') {
@@ -130,8 +91,40 @@
                 selectFile(fileId, hash);
             }
         }
+
+        /// global regex search
+        function search() {
+            const searchQuery = document.getElementById('search').value;
+            console.log("searching...", searchQuery);
+            // const searchRegex = new RegExp(searchQuery, 'g');
+            // const searchFrame = document.getElementById('searchframe');
+            const codeview = document.getElementById('codeview');
+            codeview.contentWindow.postMessage({
+                type: 'search',
+                searchQuery: searchQuery,
+            }, '*');
+            // for (const file of files) {
+                
+            // }
+        }
+
+        function handleSearchInput(e) {
+            if (e.keyCode === 13) {
+                search();
+            }
+        }
     </script>
 </body>
+
+<div id="header-container">
+    <input 
+        id="search" 
+        type="text" 
+        placeholder="Search..." 
+        onkeyup="handleSearchInput(event)" 
+    />
+    <iframe id="searchframe"></iframe>
+</div>
 
 <!-- make grid -->
 <!-- <div class="grid">

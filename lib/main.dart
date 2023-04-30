@@ -25,7 +25,7 @@ part 'feature/html_generation/codeview_generation/documentation_tooltip.dart';
 part 'feature/ast_analysis/comment_analysis.dart';
 part 'feature/ast_analysis/class_analysis.dart';
 
-bool autorun = true;
+bool autorun = false;
 bool autopack = false;
 bool analyzeErrors = false;
 

@@ -39,7 +39,7 @@ This is how it works:
 ### Medium priority
 
 - [x] Build archive for export
-- [ ] Search by regex expression
+- [x] Search by regex expression
 - [ ] Upload zip project
 - [ ] Upload via github repo
 - [ ] Show Static analysis results on 'dart analyze'

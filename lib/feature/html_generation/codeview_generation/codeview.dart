@@ -56,11 +56,13 @@ String initializeCodeviewPipeline(String codeString, List<AstNode> nodes) {
   return codeviewPipeline(codeString, usages, blocks[currentFile]);
 }
 
-String getCodeviewHTML(String codeString, List<AstNode> usages) {
-  codeString = initializeCodeviewPipeline(codeString, usages);
-  codeString = "$codeviewTemplate\n"
-      "<pre><code>$codeString</code></pre>\n";
-  return codeString;
+String getCodeviewHTML(String originalCode, List<AstNode> usages) {
+  String newCode = originalCode;
+  newCode = initializeCodeviewPipeline(newCode, usages);
+  newCode = "$codeviewTemplate\n"
+      "<pre><code id='code-section'>$newCode</code></pre>\n"
+      "<pre><code id='original-code-section'>$originalCode</code></pre>\n";
+  return newCode;
 }
 
 String generateCodeviewHTML(
