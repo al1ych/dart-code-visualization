@@ -14,6 +14,7 @@ import 'package:analyzer/dart/ast/visitor.dart';
 
 part 'feature/syntax_highlighting/syntax_highlighting.dart';
 part 'feature/ast_analysis/ast_analysis.dart';
+part 'feature/ast_analysis/meta_analysis.dart';
 part 'feature/html_generation/codeview_generation/codeview.dart';
 part 'feature/html_generation/layout.dart';
 part 'feature/html_generation/explorer.dart';
@@ -23,6 +24,9 @@ part 'feature/html_generation/codeview_generation/syntax_highlighting.dart';
 part 'feature/html_generation/codeview_generation/documentation_tooltip.dart';
 part 'feature/ast_analysis/comment_analysis.dart';
 part 'feature/ast_analysis/class_analysis.dart';
+
+bool autorun = true;
+bool analyzeErrors = false;
 
 String currentFile = '';
 
@@ -35,6 +39,12 @@ void main(List<String> args) {
 
   List<String> sources = getSourceFiles(projectTitle);
 
+  for (String filePath in sources) {
+    processSourceFileMeta(projectTitle, filePath);
+  }
+
+  print("Meta analysis done!");
+
   List<String> codeviewPaths = [];
   for (String filePath in sources) {
     processSourceFile(projectTitle, filePath, codeviewPaths);
@@ -45,7 +55,6 @@ void main(List<String> args) {
   packArchive(projectTitle);
 
   print("DartBoard is ready!");
-  bool autorun = false;
   if (autorun) {
     openGeneratedOutput(layoutPath);
   }
@@ -63,25 +72,33 @@ List<String> getSourceFiles(String projectTitle) {
   return sources;
 }
 
+void processSourceFileMeta(String projectTitle, String filePath) {
+  List<String> pathComponents = filePath.split('/');
+  int projectTitleIndex = pathComponents.indexOf(projectTitle);
+  String filename = pathComponents.skip(projectTitleIndex + 1).join('/');
+  // currentFile = filename;
+  File codeFile = File(filePath);
+  String code = codeFile.readAsStringSync();
+  var res = parseString(content: code, throwIfDiagnostics: analyzeErrors);
+  var root = res.unit.root;
+  startMetaAnalysis(root, filePath); // meta analysis
+  print("Processing meta-data for source file: $filename.dart...");
+}
+
 void processSourceFile(
   String projectTitle,
   String filePath,
   List<String> codeviewPaths,
 ) {
-  print("filePath: $filePath");
   List<String> pathComponents = filePath.split('/');
   int projectTitleIndex = pathComponents.indexOf(projectTitle);
   String filename = pathComponents.skip(projectTitleIndex + 1).join('/');
-
   currentFile = filename;
   File codeFile = File(filePath);
   String code = codeFile.readAsStringSync();
-
-  var res = parseString(content: code);
+  var res = parseString(content: code, throwIfDiagnostics: analyzeErrors);
   var root = res.unit.root;
-
-  startAnalysis(root); // ast walking
-
+  startAnalysis(root, filePath); // ast walking
   print("Processing source file: $filename.dart...");
   String cvPath = generateCodeviewHTML(filename, code, allVarUsages);
   codeviewPaths.add(cvPath);

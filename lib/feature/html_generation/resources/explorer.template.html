@@ -5,6 +5,18 @@
         return `...${path.slice(-visibleLength)}`;
     }
 
+    function passDownDataToCodeview({hash}) {
+        const codeview = document.getElementById('codeview');
+        const filesData = { type: 'files', files };
+        const thisFileUrlData = { type: 'this-file-url', thisFileUrl: selectedFileData.uri };
+        const instaJumpData = { type: 'insta-jump', hash};
+        codeview.addEventListener('load', function() {
+            codeview.contentWindow.postMessage(filesData, '*');
+            codeview.contentWindow.postMessage(thisFileUrlData, '*');
+            codeview.contentWindow.postMessage(instaJumpData, '*');
+            console.log("Sending insta-jump: ", instaJumpData, " to codeview.");
+        });
+    }
 
     window.onload = function () {
         const explorerViewContent = document.getElementById("explorer-view-content");
@@ -14,20 +26,31 @@
             );
             explorerViewContent.children[i].setAttribute("data-tooltip", files[i].name);
         }
-        selectFile(0);
+        selectFile(0); // default selection
+        passDownDataToCodeview();
     };
 
-    function selectFile(fileId) {
+    let selectedFileData = {};
+
+    function selectFile(fileId, hash) {
         const selectedFile = document.querySelector('.selected');
         if (selectedFile) {
             selectedFile.classList.remove('selected');
         }
         document.getElementById(fileId).classList.add('selected');
-        const fileData = {
-            fileName: files[fileId].name, 
-            fileUri: files[fileId].uri,
-        };
-        window.parent.postMessage({ type: 'selectFile', fileData }, '*');
+        switchCodeview(files[fileId].uri, hash);
+    }
+
+    function switchCodeview(uri, hash) {
+        selectedFileData = files.find(f => f.uri === uri);
+        console.log("new selected file: ", selectedFileData.name, "");
+        const codeview = document.getElementById('codeview');
+        codeview.src = uri;
+        if (hash) {
+            codeview.hash = hash;
+        }
+        console.log("from switch codeview: ", hash);
+        passDownDataToCodeview({hash});
     }
 </script>
 

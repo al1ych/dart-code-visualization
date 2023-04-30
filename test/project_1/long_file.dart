@@ -1,5 +1,3 @@
-String x = "";
-
 void f(int a) {
   int x = 5;
   a = x;
@@ -45,8 +43,11 @@ void f(int a) {
 
 // more functions like this
 int g(int a, int b) {
+  print(x);
   return a + b;
 }
+
+int zz = 123;
 
 String zIndex() {
   return "z-index: 1;";

@@ -108,17 +108,75 @@
 </style>
 
 <script>
+
+    /////////////////////////
+    // Inter-iframe communication
+
+    let files = [];
+    let thisFileUrl = "unknown";
+
+    window.addEventListener('message', function(event) {
+        if (event.data.type == "files") {
+            files = event.data.files;
+            console.log("Received files from parent!", files);
+        }
+        if (event.data.type == "this-file-url") {
+            thisFileUrl = event.data.thisFileUrl;
+            console.log("Received thisFileUrl from parent!", thisFileUrl);
+        }
+        if (event.data.type == "insta-jump") {
+            console.log("Received insta-jump from parent!", event.data.hash);
+            jumpTo(event.data.hash);
+        }
+    });
+
+    function requestSelectFile(fileId, hash) {
+        window.parent.postMessage({ type: 'selectFile', fileId, hash }, '*');
+    }
+
     /////////////////////////
     // Jumping to declarations
 
-    function jumpTo(whereTo) {
-        console.log(`Jumping to ${whereTo}`)
-        document.getElementById(whereTo).classList.add("declaration-highlighted")
-        window.location.hash = whereTo;
-        setTimeout(() => {
-            document.getElementById(whereTo).classList.remove("declaration-highlighted")
-        }, 3000)
+
+    function areUriEqual(uri1, uri2) { // todo not correct
+        console.log("uri1 before: ", uri1);
+        uri1 = uri1.substring(uri1.indexOf("test/") + 5);
+        uri1 = uri1.substring(uri1.indexOf("/") + 1);
+        console.log("uri1 after: ", uri1);
+        console.log("uri2 before: ", uri2);
+        uri2 = uri2.substring(uri2.indexOf("html/") + 5);
+        uri2 = uri2.substring(0, uri2.indexOf(".codeview.html"));
+        console.log("uri2 after: ", uri2);
+        console.log("are uris equal: ", uri1 === uri2);
+        return uri1 === uri2;
     }
+
+    function jumpTo(hash, fileUri) {
+        console.log(`Jumping to ${hash} in ${fileUri}`);
+        console.log("compare: ", fileUri, thisFileUrl);
+        if (fileUri && !areUriEqual(fileUri, thisFileUrl)) {
+            const fileId = files.findIndex(file => areUriEqual(fileUri, file.uri));
+            requestSelectFile(fileId, hash);
+        } else {
+            window.location.hash = hash;
+            console.log("jumping to: ", hash);
+            document.getElementById(hash).classList.add("declaration-highlighted");
+            setTimeout(() => {
+                document.getElementById(hash).classList.remove("declaration-highlighted");
+            }, 3000);
+        }
+    }
+
+    /*
+const files = [{name: 'functions.dart', uri: '/Users/tanugayev/dev/dart-code-visualization/lib/../build/html/functions.dart.codeview.html'},
+{name: 'test_hoisting.dart', uri: '/Users/tanugayev/dev/dart-code-visualization/lib/../build/html/test_hoisting.dart.codeview.html'},
+{name: 'folder/test_class_usage.dart', uri: '/Users/tanugayev/dev/dart-code-visualization/lib/../build/html/folder/test_class_usage.dart.codeview.html'},
+{name: 'folder/test_class.dart', uri: '/Users/tanugayev/dev/dart-code-visualization/lib/../build/html/folder/test_class.dart.codeview.html'},
+{name: 'folder/program_1.dart', uri: '/Users/tanugayev/dev/dart-code-visualization/lib/../build/html/folder/program_1.dart.codeview.html'},
+{name: 'main.dart', uri: '/Users/tanugayev/dev/dart-code-visualization/lib/../build/html/main.dart.codeview.html'},
+{name: 'classes.dart', uri: '/Users/tanugayev/dev/dart-code-visualization/lib/../build/html/classes.dart.codeview.html'},
+{name: 'long_file.dart', uri: '/Users/tanugayev/dev/dart-code-visualization/lib/../build/html/long_file.dart.codeview.html'}]
+*/
 
     /////////////////////////
     // Block Collapsing

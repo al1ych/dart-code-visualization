@@ -122,18 +122,13 @@
     <script>
         window.addEventListener('message', receiveEvent);
 
+        /// receive event from codeview iframe
         function receiveEvent(event) {
             if (event.data.type === 'selectFile') {
-                const fileData = event.data.fileData;
-                console.log('File selected:', fileData.fileUri);
-                switchCodeview(fileData.fileUri);
+                const fileId = event.data.fileId;
+                const hash = event.data.hash;
+                selectFile(fileId, hash);
             }
-        }
-        
-        function switchCodeview(uri) {
-            // change codeview iframe src
-            const codeview = document.getElementById('codeview');
-            codeview.src = uri;
         }
     </script>
 </body>

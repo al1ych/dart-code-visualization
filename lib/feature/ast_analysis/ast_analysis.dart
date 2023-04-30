@@ -21,7 +21,6 @@ AstNode getRootDeclaration(AstNode node) {
 }
 
 List<AstNode> contextStack = [];
-Map<String, AstNode> topLevelDeclarations = {};
 List<AstNode> blocksBuffer = [];
 Map<String, List<AstNode>> blocks = {}; // blocks of particular file
 Map<SimpleIdentifier, AstNode> jumpToDeclaration = {};
@@ -29,7 +28,7 @@ Map<AstNode, List<SimpleIdentifier>> jumpToUsages = {};
 
 void _clearAnalysisState() {
   contextStack = [];
-  topLevelDeclarations = {};
+  // topLevelDeclarations = {};
   jumpToDeclaration = {};
   jumpToUsages = {};
   blocksBuffer = [];
@@ -43,7 +42,9 @@ void _connectUsageWithDeclaration(AstNode usage, AstNode decl) {
   jumpToUsages[decl].add(usage);
 }
 
-AstNode _findDeclaration(SimpleIdentifier idNode) {
+// todo: change dynamic -> OR<AstNode, TopLevelDeclarationInfo>
+dynamic _findDeclaration(SimpleIdentifier idNode) {
+  // searching decl in file context
   for (int i = contextStack.length - 1; i >= 0; i--) {
     if (contextStack[i] is VariableDeclaration) {
       VariableDeclaration decl = contextStack[i]; // down-casting
@@ -77,30 +78,14 @@ AstNode _findDeclaration(SimpleIdentifier idNode) {
     }
   }
 
+  // searching in project context
   if (topLevelDeclarations.containsKey(idNode.name)) {
-    return topLevelDeclarations[idNode.name];
+    // print("found ${idNode.name} in project context");
+    TopLevelDeclarationInfo declInfo = topLevelDeclarations[idNode.name];
+    return declInfo.node;
   }
 
   return null;
-}
-
-class ToppersVisitor extends GeneralizingAstVisitor {
-  /////////////////////////////
-  /// Visiting top-level declarations
-
-  @override
-  void visitVariableDeclaration(VariableDeclaration node) {
-    SimpleIdentifier id = node.name;
-    topLevelDeclarations[id.name] = id;
-    super.visitVariableDeclaration(node);
-  }
-
-  @override
-  void visitFunctionDeclaration(FunctionDeclaration node) {
-    SimpleIdentifier id = node.name;
-    topLevelDeclarations[id.name] = id;
-    super.visitFunctionDeclaration(node);
-  }
 }
 
 class NameResolveAndContextStackVisitor extends RecursiveAstVisitor {
@@ -183,13 +168,14 @@ class NameResolveAndContextStackVisitor extends RecursiveAstVisitor {
   }
 }
 
-startAnalysis(AstNode root) {
+startAnalysis(AstNode root, String filePath) {
   _clearAnalysisState();
-  root.visitChildren(ToppersVisitor()); // collecting top-level entities first
+  // order: collecting top-level entities before resolving names
   root.visitChildren(NameResolveAndContextStackVisitor());
-  root.visitChildren(
-      ClassNameToDeclarationVisitor()); // collect class names first
+  // order: collect class names before collecting class info
+  root.visitChildren(ClassNameToDeclarationVisitor());
   root.visitChildren(ClassInfoVisitor());
   root.visitChildren(DocumentationCommentVisitor());
   blocks[currentFile] = blocksBuffer;
+  // print("top level decls for file $filePath: $topLevelDeclarations");
 }

@@ -9,10 +9,23 @@ String _wrapUsage(String usage, int uPos, int dPos) {
 
 void addDeclarationBinding(String codeString, List<SimpleIdentifier> usages) {
   for (int i = 0; i < usages.length; i++) {
-    final declarationPos = getRootDeclaration(usages[i]).offset;
+    final declaration = getRootDeclaration(usages[i]);
+    final declarationPos = declaration.offset;
+    final declarationFile = nodeFilePath[declaration] ?? "";
+
+    // print("declaration: $declaration -> nodeFilePath: $declarationFile");
+    // print(
+    //     "current file from addDeclarationBinding: $currentFile, "
+    //     "declaration file: $declarationFile");
+    // if (currentFile.split("/").last != declarationFile.split("/").last) {
+    //   print("!usage ${usages[i]} resides in $currentFile!");
+    //   print(
+    //       "!declaration $declaration resides in diff file: $declarationFile!");
+    // }
 
     const classes = "class='variable-usage'";
-    final events = "onclick='jumpTo($declarationPos)'";
+    final events = "onclick=\"jumpTo($declarationPos, '$declarationFile')\"";
+    // final events = "onclick='requestSelectFile(1)'";
     final usagePos = usages[i].offset;
 
     final tag1 = "<span id='$usagePos' $classes $events>";
