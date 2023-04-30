@@ -56,28 +56,30 @@ void addDocumentationTooltip(
   List<DocumentationEntity> comments,
   List<SimpleIdentifier> usages,
 ) {
-  if (comments == null) {
-    return;
-  }
+  // if (comments == null) {
+  //   return;
+  // }
 
   const separator = "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~<br/>";
 
-  for (var comment in comments) {
-    final id = "doc-${comment.offset}";
-    String docText = comment.comment;
-    docText = docText.replaceAll("\n", "<br/>");
-    final onmousemove =
-        "onmousemove=\"showTooltip(event, '$id', '$docText')\" ";
-    const onmouseout = "onmouseout=\"hideTooltip()\" ";
+  if (comments != null) {
+    for (var comment in comments) {
+      final id = "doc-${comment.offset}";
+      String docText = comment.comment;
+      docText = docText.replaceAll("\n", "<br/>");
+      final onmousemove =
+          "onmousemove=\"showTooltip(event, '$id', '$docText')\" ";
+      const onmouseout = "onmouseout=\"hideTooltip()\" ";
 
-    final tagBegin = "<span id='$id' class='doc' $onmousemove $onmouseout>";
-    const tagEnd = "</span>";
+      final tagBegin = "<span id='$id' class='doc' $onmousemove $onmouseout>";
+      const tagEnd = "</span>";
 
-    tags[currentFile].putIfAbsent(comment.offset, () => []);
-    tags[currentFile][comment.offset].add(tagBegin);
+      tags[currentFile].putIfAbsent(comment.offset, () => []);
+      tags[currentFile][comment.offset].add(tagBegin);
 
-    tags[currentFile].putIfAbsent(comment.offset + comment.length, () => []);
-    tags[currentFile][comment.offset + comment.length].add(tagEnd);
+      tags[currentFile].putIfAbsent(comment.offset + comment.length, () => []);
+      tags[currentFile][comment.offset + comment.length].add(tagEnd);
+    }
   }
 
   for (int i = 0; i < usages.length; i++) {
