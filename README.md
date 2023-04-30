@@ -15,6 +15,11 @@ This is how it works:
 
 ## Features
 
+### Bugs to fix
+
+- [x] Class is null in tooltip across files
+- [x] Class annotation docs should show on top of class desc (/// ~~~~~~~ fields, ...)
+
 ### High priority
 
 - [x] Generate HTML files from source code in Dart

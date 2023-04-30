@@ -56,10 +56,6 @@ void addDocumentationTooltip(
   List<DocumentationEntity> comments,
   List<SimpleIdentifier> usages,
 ) {
-  // if (comments == null) {
-  //   return;
-  // }
-
   const separator = "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~<br/>";
 
   if (comments != null) {
@@ -96,7 +92,12 @@ void addDocumentationTooltip(
       n = n.parent;
       times--;
     }
+
     if (n is ClassDeclaration) {
+      if (commentById[declarationId] != null) {
+        docText += commentById[declarationId];
+        docText += "<br/>$separator";
+      }
       docText += classDecription[n].toString();
     }
 
@@ -106,16 +107,22 @@ void addDocumentationTooltip(
       String variableName = usages[i].name;
 
       if (typeName != null && !isBuiltIn(typeName.name.name)) {
+        ClassDeclaration node = classNameToDeclaration[typeName.name.name];
+
+        if (commentById["doc-${node.name.offset}"] != null) {
+          docText += commentById["doc-${node.name.offset}"];
+          docText += "<br/>$separator";
+        }
+
         docText += "Type: ${typeName.name.name}\n";
         docText += separator;
-        ClassDeclaration node = classNameToDeclaration[typeName.name.name];
+
         if (node != null) {
           docText += classDecription[node].toString();
         }
       }
     }
 
-    docText += commentById[declarationId] ?? '';
     docText = docText.replaceAll("\n", "<br/>");
 
     const classes = "";

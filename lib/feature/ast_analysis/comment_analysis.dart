@@ -34,6 +34,12 @@ class DocumentationCommentVisitor extends RecursiveAstVisitor<void> {
       if (node is FunctionDeclaration) {
         SimpleIdentifier functionName = node.name;
         commentById["doc-${functionName.offset}"] = comment.comment;
+      } else if (node is VariableDeclaration) {
+        SimpleIdentifier variableName = node.name;
+        commentById["doc-${variableName.offset}"] = comment.comment;
+      } else if (node is ClassDeclaration) {
+        SimpleIdentifier className = node.name;
+        commentById["doc-${className.offset}"] = comment.comment;
       }
     }
   }
