@@ -26,6 +26,7 @@ part 'feature/ast_analysis/comment_analysis.dart';
 part 'feature/ast_analysis/class_analysis.dart';
 
 bool autorun = true;
+bool autopack = false;
 bool analyzeErrors = false;
 
 String currentFile = '';
@@ -52,9 +53,12 @@ void main(List<String> args) {
 
   String layoutPath = generateLayoutHTML(projectTitle, codeviewPaths);
 
-  packArchive(projectTitle);
-
   print("DartBoard is ready!");
+
+  if (autopack) {
+    packArchive(projectTitle);
+  }
+
   if (autorun) {
     openGeneratedOutput(layoutPath);
   }
