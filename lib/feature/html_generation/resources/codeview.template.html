@@ -23,7 +23,7 @@
         }
     }
 
-    code, .tooltip {
+    code, .tooltip, .usages-list-container {
         font-family: 'JetBrains Mono', 'Fira Code';
         font-size: 105%;
     }
@@ -104,6 +104,27 @@
         z-index: 100;
         font-size: smaller;
         visibility: hidden;
+    }
+
+    .usages-list-container {
+        position: absolute;
+        background-color: #63307b80;
+        backdrop-filter: blur(5px);
+        color: white;
+        padding: 0.4em;
+        border-radius: 0.5em;
+        z-index: 100;
+        font-size: smaller;
+        visibility: hidden;
+    }
+
+    /* .usages-list-container > * {
+        color: white !important;
+    } */
+
+    .var-pointer {
+        cursor: pointer;
+        color: white;
     }
 
     .search-match {
@@ -208,9 +229,9 @@
     //     window.parent.postMessage({ type: 'code', code: originalCode }, '*');
     // }
 
+
     /////////////////////////
     // Jumping to declarations
-
 
     function areUriEqual(uri1, uri2) { // todo not correct
         console.log("uri1 before: ", uri1);
@@ -225,9 +246,15 @@
         return uri1 === uri2;
     }
 
-    function jumpTo(hash, fileUri) {
+    function jumpTo(hash, fileUri, fileUriCoded) {
         console.log(`Jumping to ${hash} in ${fileUri}`);
         console.log("compare: ", fileUri, thisFileUrl);
+        if (fileUri === null) {
+            console.log("encoded file uri: ", fileUriCoded);
+            // from array of char codes to string
+            fileUri = fileUriCoded.map(c => String.fromCharCode(c)).join("");
+            console.log("decoded into: ", fileUri);
+        }
         if (fileUri && !areUriEqual(fileUri, thisFileUrl)) {
             const fileId = files.findIndex(file => areUriEqual(fileUri, file.uri));
             requestSelectFile(fileId, hash);
@@ -240,6 +267,7 @@
             }, 3000);
         }
     }
+
 
     /////////////////////////
     // Block Collapsing
@@ -276,6 +304,7 @@
         }
     }
 
+
     /////////////////////////
     // Tooltip
 
@@ -306,11 +335,44 @@
         document.body.appendChild(tooltip);
     }
 
+
+    /////////////////////////
+    // Usages List
+
+    function showUsagesList(usagesListHTML) {
+        let usagesList = document.getElementById(`usages-list`);
+        usagesList.style.visibility = "visible";
+        // move usages-list to mouse coords + scroll position
+        usagesList.style.left = "0px";
+        usagesList.style.right = "0px";
+        usagesList.style.top = (event.clientY + window.pageYOffset + 4) + "px";
+        // set usages-list text
+        usagesList.innerHTML = usagesListHTML;
+    }
+
+    function createUsagesListContainer() {
+        let container = document.createElement("div");
+        container.innerHTML = "<usages>";
+        container.classList.add("usages-list-container");
+        container.id = `usages-list`;
+        document.body.appendChild(container);
+        console.log("Created usages list container!");
+    }
+
+    function hideUsagesList() {
+        let usagesList = document.getElementById(`usages-list`);
+        usagesList.style.visibility = "hidden";
+        console.log("Hiding usages list!");
+    }
+
+
     /////////////////////////
     // Window Setup
+
     window.onload = () => {
         originalCodeSnapshot = document.getElementById("original-code-section").innerText;
         createTooltip();
+        createUsagesListContainer();
     }
 </script>
 

@@ -40,6 +40,7 @@ This is how it works:
 
 - [x] Build archive for export
 - [x] Search by regex expression
+- [ ] Line numbers
 - [ ] Upload zip project
 - [ ] Upload via github repo
 - [ ] Show Static analysis results on 'dart analyze'

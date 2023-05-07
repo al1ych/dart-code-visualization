@@ -109,6 +109,8 @@ void addDocumentationTooltip(
       if (typeName != null && !isBuiltIn(typeName.name.name)) {
         ClassDeclaration node = classNameToDeclaration[typeName.name.name];
 
+        // if (node.name == null) continue; // todo
+
         if (commentById["doc-${node.name.offset}"] != null) {
           docText += commentById["doc-${node.name.offset}"];
           docText += "<br/>$separator";

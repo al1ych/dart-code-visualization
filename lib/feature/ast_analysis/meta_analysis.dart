@@ -4,6 +4,8 @@ part of '../../main.dart';
 
 Map<String, TopLevelDeclarationInfo> topLevelDeclarations = {};
 Map<AstNode, String> nodeFilePath = {};
+Map<String, String> nodeFilePathBySignature = {};
+// Map<AstNode, int> nodeFilePosition = {};
 
 class TopLevelDeclarationInfo {
   AstNode node;
@@ -25,7 +27,8 @@ class FilePathResolver extends GeneralizingAstVisitor<void> {
   @override
   void visitNode(AstNode node) {
     nodeFilePath[node] = path;
-    // print("node: $node --- path: $path");
+    nodeFilePathBySignature["$node-${node.offset}"] = path;
+    // nodeFilePosition[node] = node.offset;
     super.visitNode(node);
   }
 }
