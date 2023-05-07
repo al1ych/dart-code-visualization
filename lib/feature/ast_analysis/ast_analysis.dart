@@ -101,6 +101,7 @@ class NameResolveAndContextStackVisitor extends RecursiveAstVisitor {
   @override
   void visitSimpleIdentifier(SimpleIdentifier node) {
     AstNode decl = _findDeclaration(node);
+    // print("usage ${node.name} found: $decl");
     _connectUsageWithDeclaration(node, decl);
     super.visitSimpleIdentifier(node);
   }
@@ -108,6 +109,9 @@ class NameResolveAndContextStackVisitor extends RecursiveAstVisitor {
   @override
   void visitMethodInvocation(MethodInvocation node) {
     AstNode decl = _findDeclaration(node.methodName);
+    print("usage ${node.methodName} found: $decl");
+    print("> ${nodeFilePathBySignature[getNodeSignature(node.methodName)]}");
+    print("> ${nodeFilePath[decl]}");
     _connectUsageWithDeclaration(node.methodName, decl);
     super.visitMethodInvocation(node);
   }

@@ -19,6 +19,10 @@ class TopLevelDeclarationInfo {
   }
 }
 
+String getNodeSignature(AstNode node) {
+  return "$node-${node.offset}";
+}
+
 class FilePathResolver extends GeneralizingAstVisitor<void> {
   final String path;
 
@@ -27,7 +31,7 @@ class FilePathResolver extends GeneralizingAstVisitor<void> {
   @override
   void visitNode(AstNode node) {
     nodeFilePath[node] = path;
-    nodeFilePathBySignature["$node-${node.offset}"] = path;
+    nodeFilePathBySignature[getNodeSignature(node)] = path;
     // nodeFilePosition[node] = node.offset;
     super.visitNode(node);
   }
@@ -67,4 +71,5 @@ class ToppersVisitor extends GeneralizingAstVisitor {
 startMetaAnalysis(AstNode root, String filePath) {
   root.visitChildren(FilePathResolver(filePath));
   root.visitChildren(ToppersVisitor(filePath));
+  // print("toppers: ${topLevelDeclarations['performOperation']}");
 }

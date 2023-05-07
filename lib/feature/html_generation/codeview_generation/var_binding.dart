@@ -4,7 +4,8 @@ part of '../../../main.dart';
 
 void _wrapWithJumpToDeclaration(SimpleIdentifier usage, AstNode declaration) {
   final declarationPos = declaration.offset;
-  final declarationFile = nodeFilePath[declaration] ?? "";
+  final declarationFile =
+      nodeFilePathBySignature[getNodeSignature(declaration)] ?? "";
 
   const classes = "class='variable-usage'";
   final events = "onclick=\"jumpTo($declarationPos, '$declarationFile')\"";
@@ -22,7 +23,8 @@ void _wrapWithJumpToDeclaration(SimpleIdentifier usage, AstNode declaration) {
 
 void _wrapWithUsagesList(AstNode declaration) {
   final declarationPos = declaration.offset;
-  final declarationFile = nodeFilePath[declaration] ?? "";
+  final declarationFile =
+      nodeFilePathBySignature[getNodeSignature(declaration)] ?? "";
 
   List<AstNode> usages = jumpToUsages[declaration];
   print("Usages for declaration: $declaration");
@@ -45,7 +47,8 @@ String _getUsagesListString(List<AstNode> usages) {
   String result = "";
   for (var usage in usages) {
     final usagePos = usage.offset;
-    final usageFile = nodeFilePathBySignature["$usage-${usage.offset}"] ?? "";
+    final signature = getNodeSignature(usage);
+    final usageFile = nodeFilePathBySignature[signature] ?? "";
     print("Usage node: $usage, file: $usageFile");
 
     // encode into array to bypass html escaping
