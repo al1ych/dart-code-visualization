@@ -27,7 +27,10 @@ void _wrapWithUsagesList(AstNode declaration) {
       nodeFilePathBySignature[getNodeSignature(declaration)] ?? "";
 
   List<AstNode> usages = jumpToUsages[getNodeSignature(declaration)];
-  print("Usages for declaration $declaration: $usages");
+  print("Usages for declaration $declaration: ");
+  for (var usage in usages) {
+    print(usage.offset);
+  }
   String usagesListString = _getUsagesListString(usages, declaration);
 
   const classes = "class='variable-declaration'";
@@ -45,18 +48,21 @@ void _wrapWithUsagesList(AstNode declaration) {
 
 String _getUsagesListString(List<AstNode> usages, AstNode decl) {
   String result = "";
+  int index = -1;
   for (var usage in usages) {
+    index++;
     final usagePos = usage.offset;
     final signature = getNodeSignature(usage);
+    print("usage signature for usage ${usage.offset} of $decl: $signature");
     final usageFile = nodeFilePathBySignature[signature] ?? "";
-    print("Usage node: $usage, file: $usageFile");
-    print(
-        "Decl node: $decl, file: ${nodeFilePathBySignature[getNodeSignature(decl)]}");
+    // print("Usage node: $usage, file: $usageFile");
+    // print(
+    //     "Decl node: $decl, file: ${nodeFilePathBySignature[getNodeSignature(decl)]}");
     // encode into array to bypass html escaping
     final usageFileEncoded = usageFile.codeUnits;
     // print("node: $usage file: $usageFile encode: $usageFileEncoded");
     // usage desc should take few lines above and below it in the source code
-    final usageDescription = _getUsageDescription(usage);
+    final usageDescription = _getUsageDescription(usage, index);
     const classes = "class='var-pointer'";
     final events =
         "onclick='jumpTo($usagePos, null, $usageFileEncoded); hideUsagesList();'";
@@ -66,21 +72,48 @@ String _getUsagesListString(List<AstNode> usages, AstNode decl) {
   return result;
 }
 
-// todo show USAGE's line, not declaration's
-String _getUsageDescription(AstNode usage) {
+String _getUsageDescription(AstNode usage, int index) {
+  // search in the code string for the usage and return few lines above and below
   final lines = _currentCodeString.split("\n");
-  final line =
-      lines.where((element) => element.contains(usage.toString())).first;
-  final lineNumber = lines.indexOf(line) + 1;
-  const window = 1;
-  final start = max(0, lineNumber - window);
-  final end = min(lines.length, lineNumber + window);
-  final linesToTake = lines.sublist(start, end);
-  // add line numbers to each
-  for (int i = 0; i < linesToTake.length; i++) {
-    linesToTake[i] = "Line ${start + i + 1}: ${linesToTake[i]}";
+
+  for (int i = 0; i < lines.length; i++) {
+    // replace everything that's not a letter by a space
+    // lines[i] = lines[i].replaceAll(RegExp(r"[^a-zA-Z]"), " ");
+    // substitute quotations with spaces
+    lines[i] = lines[i].replaceAll("\"", " ");
+    lines[i] = lines[i].replaceAll("\'", " ");
   }
-  final result = linesToTake.join("<br/>");
+
+  String line = ""; // line with usage
+  int offset = 0;
+  for (String l in lines) {
+    if (usage.offset > offset && usage.offset < offset + l.length) {
+      line = l;
+      break;
+    }
+    offset += l.length;
+  }
+
+  final lineNumber = lines.indexOf(line) + 1;
+  if (lineNumber == -1) {
+    return "Usage #$index not found in the source code";
+  }
+
+  final start = max(0, lineNumber - 2);
+  final end = min(lines.length, lineNumber + 2);
+
+  final resultLines = lines.sublist(start, end);
+  if (index != 0) {
+    resultLines.insert(0, "Usage #$index at line $lineNumber:");
+  } else {
+    resultLines.insert(0, "Declaration of $usage at line $lineNumber:");
+  }
+
+  for (int i = 1; i < resultLines.length; i++) {
+    resultLines[i] = "${start + i + 1} | ${resultLines[i]}";
+  }
+
+  final result = resultLines.join("<br/>");
   return result;
 }
 

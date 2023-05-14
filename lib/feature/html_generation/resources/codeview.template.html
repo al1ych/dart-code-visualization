@@ -376,7 +376,7 @@
         // move usages-list to mouse coords + scroll position
         usagesList.style.left = "0px";
         usagesList.style.right = "0px";
-        usagesList.style.top = (event.clientY + window.pageYOffset + 6) + "px";
+        usagesList.style.top = Math.floor((event.clientY + window.pageYOffset) / 20) * 20 + 21 + "px";
         // set usages-list text
         usagesList.innerHTML = usagesListHTML;
     }
@@ -457,7 +457,7 @@
 
         flex-grow: 1;
         margin-left: 2em;
-        
+
         overflow: hidden;
         scrollbar-width: none;
         -ms-overflow-style: none;;
