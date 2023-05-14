@@ -32,6 +32,7 @@ class FilePathResolver extends GeneralizingAstVisitor<void> {
   void visitNode(AstNode node) {
     nodeFilePath[node] = path;
     nodeFilePathBySignature[getNodeSignature(node)] = path;
+    nodeFilePathBySignature[node.toString()] = path;
     // nodeFilePosition[node] = node.offset;
     super.visitNode(node);
   }

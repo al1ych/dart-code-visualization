@@ -3,6 +3,7 @@
 // ignore_for_file: avoid_print
 
 import 'dart:io';
+import 'dart:math';
 
 import 'package:archive/archive.dart';
 import 'package:archive/archive_io.dart';
@@ -24,6 +25,7 @@ part 'feature/html_generation/codeview_generation/syntax_highlighting.dart';
 part 'feature/html_generation/codeview_generation/documentation_tooltip.dart';
 part 'feature/ast_analysis/comment_analysis.dart';
 part 'feature/ast_analysis/class_analysis.dart';
+part 'feature/html_generation/codeview_generation/line_numbers.dart';
 
 bool autorun = false;
 bool autopack = false;

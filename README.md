@@ -34,13 +34,13 @@ This is how it works:
 - [x] Project tree
 - [x] Upload the source files of the input project
 - [x] Modular scoping
-- [ ] Show List of usages of a decl and jump
+- [x] Show List of usages of a decl and jump
 
 ### Medium priority
 
 - [x] Build archive for export
 - [x] Search by regex expression
-- [ ] Line numbers
+- [x] Line numbers
 - [ ] Upload zip project
 - [ ] Upload via github repo
 - [ ] Show Static analysis results on 'dart analyze'

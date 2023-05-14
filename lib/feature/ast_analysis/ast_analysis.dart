@@ -23,7 +23,7 @@ List<AstNode> contextStack = [];
 List<AstNode> blocksBuffer = [];
 Map<String, List<AstNode>> blocks = {}; // blocks of particular file
 Map<SimpleIdentifier, AstNode> jumpToDeclaration = {};
-Map<AstNode, List<SimpleIdentifier>> jumpToUsages = {};
+Map<String, List<SimpleIdentifier>> jumpToUsages = {}; // signature->node
 
 void _clearAnalysisState() {
   contextStack = [];
@@ -35,10 +35,13 @@ void _clearAnalysisState() {
 
 void _connectUsageWithDeclaration(AstNode usage, AstNode decl) {
   jumpToDeclaration[usage] = decl;
-  if (jumpToUsages[decl] == null) {
-    jumpToUsages[decl] = [];
+  if (decl == null) return;
+  if (jumpToUsages[getNodeSignature(decl)] == null) {
+    jumpToUsages[getNodeSignature(decl)] = [];
   }
-  jumpToUsages[decl].add(usage);
+  jumpToUsages[getNodeSignature(decl)].add(usage);
+  print(
+      "Adding usage $usage to decl $decl: ${jumpToUsages[getNodeSignature(decl)]}");
 }
 
 // todo: change dynamic -> OR<AstNode, TopLevelDeclarationInfo>
@@ -111,7 +114,10 @@ class NameResolveAndContextStackVisitor extends RecursiveAstVisitor {
     AstNode decl = _findDeclaration(node.methodName);
     print("usage ${node.methodName} found: $decl");
     print("> ${nodeFilePathBySignature[getNodeSignature(node.methodName)]}");
-    print("> ${nodeFilePath[decl]}");
+    if (decl != null)
+      print("> ${nodeFilePathBySignature[getNodeSignature(decl)]}");
+    else
+      print("> decl null");
     _connectUsageWithDeclaration(node.methodName, decl);
     super.visitMethodInvocation(node);
   }

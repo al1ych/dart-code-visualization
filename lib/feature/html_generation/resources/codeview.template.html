@@ -2,6 +2,39 @@
     @import url("https://cdn.jsdelivr.net/gh/tonsky/FiraCode@1.207/distr/fira_code.css");
     @import url("https://dev-cats.github.io/code-snippets/JetBrainsMono.css");
 
+    /*  normalize */
+    html {
+    line-height: 1.15; /* 1 */
+    -webkit-text-size-adjust: 100%; /* 2 */
+    }
+    pre {
+    overflow: auto;
+    }
+    a {
+    background-color: transparent;
+    }
+    button,
+    input,
+    optgroup,
+    select,
+    textarea {
+    font-family: inherit; /* 1 */
+    font-size: 100%; /* 1 */
+    line-height: 1.15; /* 1 */
+    margin: 0; /* 2 */
+    }
+    /* todo: span -> div, remove whitespacing at the end */
+    div {
+    }
+    /* reset divs */
+    div {
+    display: block;
+    margin: 0;
+    }
+    /* end normalize */
+
+
+
     * {
         color: #444;
         scroll-behavior: smooth;
@@ -23,14 +56,12 @@
         }
     }
 
-    code, .tooltip, .usages-list-container {
+    code, .tooltip, .usages-list-container, .code-line {
         font-family: 'JetBrains Mono', 'Fira Code';
         font-size: 105%;
+        line-height: 20px;
     }
 
-    /* todo: span -> div, remove whitespacing at the end */
-    div {
-    }
 
     .doc {
         /* background-color: #6a8e231e !important; */
@@ -121,7 +152,7 @@
     /* .usages-list-container > * {
         color: white !important;
     } */
-
+    
     .var-pointer {
         cursor: pointer;
         color: white;
@@ -345,7 +376,7 @@
         // move usages-list to mouse coords + scroll position
         usagesList.style.left = "0px";
         usagesList.style.right = "0px";
-        usagesList.style.top = (event.clientY + window.pageYOffset + 4) + "px";
+        usagesList.style.top = (event.clientY + window.pageYOffset + 6) + "px";
         // set usages-list text
         usagesList.innerHTML = usagesListHTML;
     }
@@ -373,7 +404,76 @@
         originalCodeSnapshot = document.getElementById("original-code-section").innerText;
         createTooltip();
         createUsagesListContainer();
+        addLineNumbering();
+    }
+
+
+    /////////////////////////
+    // Line Numbering
+
+    function addLineNumbering() {
+        // get code element
+        let codeElement = document.getElementById("code-section");
+        // split code into lines by \n as well as by <br/>
+        let lines = codeElement.innerHTML.split(/<br>|<br\/>|<br \/>|\n/);
+        console.log("lines: ", lines);
+        // for each line, add a line number to line-numbers-half
+        let lineNumbersHalf = document.getElementById("line-numbers-half");
+        for (let i = 0; i < lines.length; i++) {
+            let lineNumber = document.createElement("div");
+            lineNumber.innerHTML = i + 1;
+            lineNumber.classList.add("line-number");
+            // position it at the top of the line
+            lineNumber.style.position = "absolute";
+            lineNumber.style.top = (i * 20) + "px";
+            // add it to line-numbers-half
+            lineNumbersHalf.appendChild(lineNumber);
+        }
     }
 </script>
 
+<style>
+    .line-number {
+        margin-top: 20px;
+        font-family: 'JetBrains Mono', 'Fira Code';
+        font-size: 105%;
+        line-height: 20px;
+        color: #888;
+    }
+
+    #code-container {
+        display: flex;
+    }
+
+    #line-numbers-half, #code-half {
+        display: inline-block;
+        overflow: hidden;
+    }
+
+    #line-numbers-half {}
+
+    #code-half {
+        margin: 0;
+
+        flex-grow: 1;
+        margin-left: 2em;
+        
+        overflow: hidden;
+        scrollbar-width: none;
+        -ms-overflow-style: none;;
+    }
+
+    pre {
+        margin: 0;
+        overflow: hidden;
+    }
+    code {
+        margin: 0;
+        overflow: hidden;
+    }
+</style>
+
+<div id="code-container">
+    <div id="line-numbers-half"></div>
+    <div id="code-half">
 <!-- <pre><code>$codeString</code></pre> -->

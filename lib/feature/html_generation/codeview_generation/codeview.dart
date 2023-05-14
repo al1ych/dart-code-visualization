@@ -42,6 +42,7 @@ String codeviewPipeline(
   addDeclarationBinding(codeString, usages);
   addDocumentationTooltip(codeString, comments[currentFile], usages);
   addSimpleSyntaxHighlighting(codeString);
+  addLineNumbers(codeString);
   return executePipeline(codeString);
 }
 
@@ -49,7 +50,7 @@ String initializeCodeviewPipeline(String codeString, List<AstNode> nodes) {
   List<SimpleIdentifier> usages = [];
   for (var node in nodes) {
     AstNode dRoot = getRootDeclaration(node); // get to the orig declaration
-    usages.addAll(jumpToUsages[dRoot]); // add & flatten
+    usages.addAll(jumpToUsages[getNodeSignature(dRoot)]); // add & flatten
   }
   usages.sort((a, b) => a.offset - b.offset); // sort by offset
   usages = usages.toSet().toList(); // remove duplicates
@@ -61,7 +62,9 @@ String getCodeviewHTML(String originalCode, List<AstNode> usages) {
   newCode = initializeCodeviewPipeline(newCode, usages);
   newCode = "$codeviewTemplate\n"
       "<pre><code id='code-section'>$newCode</code></pre>\n"
-      "<pre><code id='original-code-section'>$originalCode</code></pre>\n";
+      "<pre><code id='original-code-section'>$originalCode</code></pre>\n"
+      "</div>\n"
+      "</div>\n";
   return newCode;
 }
 
