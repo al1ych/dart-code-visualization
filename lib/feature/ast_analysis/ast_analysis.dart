@@ -13,6 +13,7 @@ List<AstNode> get allVarUsages {
 }
 
 AstNode getRootDeclaration(AstNode node) {
+  var x;
   while (jumpToDeclaration[node] != null && jumpToDeclaration[node] != node) {
     node = jumpToDeclaration[node];
   }

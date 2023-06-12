@@ -2,7 +2,7 @@
 
 /**
  * Person describes a person,
- * with a name and an age,
+ * wit a name and an age,
  * and can introduce themselves.
  */
 class Person {

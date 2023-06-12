@@ -28,7 +28,7 @@ part 'feature/ast_analysis/class_analysis.dart';
 part 'feature/html_generation/codeview_generation/line_numbers.dart';
 
 bool autorun = false;
-bool autopack = false;
+bool autopack = true;
 bool analyzeErrors = false;
 
 String currentFile = '';
@@ -121,8 +121,7 @@ void openGeneratedOutput(String layoutPath) {
   if (Platform.isMacOS) {
     Process.run('open', [layoutPath]).then((r) => consoleLog(r));
   } else if (Platform.isWindows) {
-    Process.run('start', [layoutPath], runInShell: true)
-        .then((r) => consoleLog(r));
+    Process.run('start', [layoutPath], runInShell: true).then((r) => consoleLog(r));
   } else if (Platform.isLinux) {
     Process.run('xdg-open', [layoutPath]).then((r) => consoleLog(r));
   }
