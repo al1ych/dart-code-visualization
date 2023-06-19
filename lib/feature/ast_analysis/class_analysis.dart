@@ -32,11 +32,10 @@ class ClassInfo {
       '> Class name: $name',
       if (modifiers.isNotEmpty) '> Modifiers: $modifiers',
       if (extendedClass.isNotEmpty) '> Extended class: $extendedClass',
-      if (implementedInterfaces.isNotEmpty)
-        '> Implemented interfaces: $implementedInterfaces',
+      if (implementedInterfaces.isNotEmpty) '> Implemented interfaces: $implementedInterfaces',
       if (mixins.isNotEmpty) '> Mixins: $mixins',
-      if (fieldNames.isNotEmpty) '> Field names: $fieldNames',
-      if (methodNames.isNotEmpty) '> Method names: $methodNames',
+      if (fieldNames.isNotEmpty) '> Fields: $fieldNames',
+      if (methodNames.isNotEmpty) '> Methods: $methodNames',
       if (constructorNames.isNotEmpty) '> Constructor names: $constructorNames',
       // '--------------------------------------------------',
     ];
@@ -67,17 +66,14 @@ class ClassInfoVisitor extends RecursiveAstVisitor<void> {
 
     List<String> implementedInterfaces;
     if (node.implementsClause != null) {
-      implementedInterfaces = node.implementsClause.interfaces
-          .map((interface) => interface.name.name)
-          .toList();
+      implementedInterfaces = node.implementsClause.interfaces.map((interface) => interface.name.name).toList();
     } else {
       implementedInterfaces = [];
     }
 
     List<String> mixins;
     if (node.withClause != null) {
-      mixins =
-          node.withClause.mixinTypes.map((mixin) => mixin.name.name).toList();
+      mixins = node.withClause.mixinTypes.map((mixin) => mixin.name.name).toList();
     } else {
       mixins = [];
     }

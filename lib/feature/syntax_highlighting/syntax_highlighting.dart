@@ -74,16 +74,16 @@ class SyntaxHighlighting {
     "const",
     "Map",
     "Set",
+    "Future",
   ];
 
   static get codePatterns => {
         RegExp(r"\bmain\b(?<!\/\/.*)"): "main",
         RegExp(r'\".*\"(?<!\/\/.*)'): "quote",
+        RegExp(r"\'.*\'(?<!\/\/.*)"): "quote", // added this line
         RegExp(r"\/\/.*"): "comment",
         RegExp(r"\/\*[\s\S]*?\*\/"): "comment",
-        RegExp(r"@[A-Za-z]+\b|(?<!@)\b(" +
-            keywords.join("|") +
-            r")\b(?<!\/\/.*)"): "keyword",
+        RegExp(r"@[A-Za-z]+\b|(?<!@)\b(" + keywords.join("|") + r")\b(?<!\/\/.*)"): "keyword",
         RegExp(r"\b(" + dataTypes.join("|") + r")\b(?<!\/\/.*)"): "data-type",
       };
 }

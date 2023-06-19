@@ -4,8 +4,7 @@ part of '../../../main.dart';
 
 void _wrapWithJumpToDeclaration(SimpleIdentifier usage, AstNode declaration) {
   final declarationPos = declaration.offset;
-  final declarationFile =
-      nodeFilePathBySignature[getNodeSignature(declaration)] ?? "";
+  final declarationFile = nodeFilePathBySignature[getNodeSignature(declaration)] ?? "";
 
   const classes = "class='variable-usage'";
   final events = "onclick=\"jumpTo($declarationPos, '$declarationFile')\"";
@@ -23,8 +22,7 @@ void _wrapWithJumpToDeclaration(SimpleIdentifier usage, AstNode declaration) {
 
 void _wrapWithUsagesList(AstNode declaration) {
   final declarationPos = declaration.offset;
-  final declarationFile =
-      nodeFilePathBySignature[getNodeSignature(declaration)] ?? "";
+  final declarationFile = nodeFilePathBySignature[getNodeSignature(declaration)] ?? "";
 
   List<AstNode> usages = jumpToUsages[getNodeSignature(declaration)];
   print("Usages for declaration $declaration: ");
@@ -64,8 +62,7 @@ String _getUsagesListString(List<AstNode> usages, AstNode decl) {
     // usage desc should take few lines above and below it in the source code
     final usageDescription = _getUsageDescription(usage, index);
     const classes = "class='var-pointer'";
-    final events =
-        "onclick='jumpTo($usagePos, null, $usageFileEncoded); hideUsagesList();'";
+    final events = "onclick='jumpTo($usagePos, null, $usageFileEncoded); hideUsagesList();'";
     String tag = "<span $classes $events>$usageDescription</span><br/>";
     result += "$tag<br/>";
   }
@@ -82,6 +79,8 @@ String _getUsageDescription(AstNode usage, int index) {
     // substitute quotations with spaces
     lines[i] = lines[i].replaceAll("\"", " ");
     lines[i] = lines[i].replaceAll("\'", " ");
+    lines[i] = lines[i].replaceAll("<", " ");
+    lines[i] = lines[i].replaceAll(">", " ");
   }
 
   String line = ""; // line with usage

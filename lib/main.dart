@@ -27,8 +27,8 @@ part 'feature/ast_analysis/comment_analysis.dart';
 part 'feature/ast_analysis/class_analysis.dart';
 part 'feature/html_generation/codeview_generation/line_numbers.dart';
 
-bool autorun = false;
-bool autopack = true;
+bool autorun = true;
+bool autopack = false;
 bool analyzeErrors = false;
 
 String currentFile = '';

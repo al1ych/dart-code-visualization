@@ -63,8 +63,7 @@ void addDocumentationTooltip(
       final id = "doc-${comment.offset}";
       String docText = comment.comment;
       docText = docText.replaceAll("\n", "<br/>");
-      final onmousemove =
-          "onmousemove=\"showTooltip(event, '$id', '$docText')\" ";
+      final onmousemove = "onmousemove=\"showTooltip(event, '$id', '$docText')\" ";
       const onmouseout = "onmouseout=\"hideTooltip()\" ";
 
       final tagBegin = "<span id='$id' class='doc' $onmousemove $onmouseout>";
@@ -98,38 +97,54 @@ void addDocumentationTooltip(
         docText += commentById[declarationId];
         docText += "<br/>$separator";
       }
-      docText += classDecription[n].toString();
+      if (classDecription[n] != null) {
+        docText += classDecription[n].toString();
+      }
     }
 
     AstNode parent = rootDeclaration.parent;
     if (parent is VariableDeclaration) {
       TypeName typeName = (parent.parent as VariableDeclarationList).type;
       String variableName = usages[i].name;
-
       if (typeName != null && !isBuiltIn(typeName.name.name)) {
         ClassDeclaration node = classNameToDeclaration[typeName.name.name];
-
-        // if (node.name == null) continue; // todo
-
+        if (node == null) continue;
+        if (node.name == null) continue;
         if (commentById["doc-${node.name.offset}"] != null) {
           docText += commentById["doc-${node.name.offset}"];
           docText += "<br/>$separator";
         }
-
         docText += "Type: ${typeName.name.name}\n";
         docText += separator;
-
+        if (node != null) {
+          docText += classDecription[node].toString();
+        }
+      }
+    } else if (usages[i].parent is TypeName) {
+      // print("parent class type name: ${usages[i].name}");
+      TypeName typeName = usages[i].parent;
+      if (typeName != null && !isBuiltIn(typeName.name.name)) {
+        ClassDeclaration node = classNameToDeclaration[typeName.name.name];
+        if (node == null) continue;
+        if (node.name == null) continue;
+        if (commentById["doc-${node.name.offset}"] != null) {
+          docText += commentById["doc-${node.name.offset}"];
+          docText += "<br/>$separator";
+        }
+        docText += "Type: ${typeName.name.name}\n";
+        docText += separator;
         if (node != null) {
           docText += classDecription[node].toString();
         }
       }
     }
 
+    // print("docText {${parent.runtimeType}}: $docText");
+
     docText = docText.replaceAll("\n", "<br/>");
 
     const classes = "";
-    final onmousemove =
-        "onmousemove=\"showTooltip(event, '$declarationId', '$docText')\" ";
+    final onmousemove = "onmousemove=\"showTooltip(event, '$declarationId', '$docText')\" ";
     const onmouseout = "onmouseout=\"hideTooltip()\" ";
     final usagePos = usages[i].offset;
 
