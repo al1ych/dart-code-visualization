@@ -44,26 +44,38 @@ void _wrapWithUsagesList(AstNode declaration) {
   tags[currentFile][usagePos + declaration.length].add(tag2);
 }
 
+String _extractLineNumber(String codeSnippet) {
+  RegExp regExp = RegExp(r'at line (\d+):');
+  var match = regExp.firstMatch(codeSnippet);
+  if (match != null && match.groupCount >= 1) {
+    return 'at line ${match.group(1)}';
+  }
+  return '';
+}
+
 String _getUsagesListString(List<AstNode> usages, AstNode decl) {
   String result = "";
   int index = -1;
+  Map<String, int> counter = {};
   for (var usage in usages) {
     index++;
     final usagePos = usage.offset;
     final signature = getNodeSignature(usage);
     print("usage signature for usage ${usage.offset} of $decl: $signature");
     final usageFile = nodeFilePathBySignature[signature] ?? "";
-    // print("Usage node: $usage, file: $usageFile");
-    // print(
-    //     "Decl node: $decl, file: ${nodeFilePathBySignature[getNodeSignature(decl)]}");
-    // encode into array to bypass html escaping
     final usageFileEncoded = usageFile.codeUnits;
-    // print("node: $usage file: $usageFile encode: $usageFileEncoded");
-    // usage desc should take few lines above and below it in the source code
     final usageDescription = _getUsageDescription(usage, index);
     const classes = "class='var-pointer'";
     final events = "onclick='jumpTo($usagePos, null, $usageFileEncoded); hideUsagesList();'";
     String tag = "<span $classes $events>$usageDescription</span><br/>";
+
+    String atLineX = _extractLineNumber(tag);
+    if (counter[atLineX] == null) {
+      counter[atLineX] = 1;
+    } else {
+      continue;
+    }
+
     result += "$tag<br/>";
   }
   return result;
