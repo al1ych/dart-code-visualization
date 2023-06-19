@@ -136,6 +136,23 @@ void addDocumentationTooltip(
           docText += classDecription[node].toString();
         }
       }
+    } else if (usages[i].parent is MethodInvocation) {
+      print("parent method invocation: ${usages[i].name}");
+      String className = usages[i].name;
+      if (className != null && !isBuiltIn(className)) {
+        ClassDeclaration node = classNameToDeclaration[className];
+        if (node == null) continue;
+        if (node.name == null) continue;
+        if (commentById["doc-${node.name.offset}"] != null) {
+          docText += commentById["doc-${node.name.offset}"];
+          docText += "<br/>$separator";
+        }
+        docText += "Type: ${className}\n";
+        docText += separator;
+        if (node != null) {
+          docText += classDecription[node].toString();
+        }
+      }
     }
 
     // print("docText {${parent.runtimeType}}: $docText");
