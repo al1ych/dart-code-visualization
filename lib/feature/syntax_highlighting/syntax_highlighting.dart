@@ -60,6 +60,7 @@ class SyntaxHighlighting {
     "static",
     "class",
     "@override",
+    "required",
   ];
 
   static const List<String> dataTypes = [

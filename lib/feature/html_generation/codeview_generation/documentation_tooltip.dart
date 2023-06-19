@@ -105,7 +105,6 @@ void addDocumentationTooltip(
     AstNode parent = rootDeclaration.parent;
     if (parent is VariableDeclaration) {
       TypeName typeName = (parent.parent as VariableDeclarationList).type;
-      String variableName = usages[i].name;
       if (typeName != null && !isBuiltIn(typeName.name.name)) {
         ClassDeclaration node = classNameToDeclaration[typeName.name.name];
         if (node == null) continue;
