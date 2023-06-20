@@ -92,6 +92,8 @@ void addDocumentationTooltip(
       times--;
     }
 
+    AstNode parent = rootDeclaration.parent;
+
     if (n is ClassDeclaration) {
       if (commentById[declarationId] != null) {
         docText += commentById[declarationId];
@@ -100,10 +102,7 @@ void addDocumentationTooltip(
       if (classDecription[n] != null) {
         docText += classDecription[n].toString();
       }
-    }
-
-    AstNode parent = rootDeclaration.parent;
-    if (parent is VariableDeclaration) {
+    } else if (parent is VariableDeclaration) {
       TypeName typeName = (parent.parent as VariableDeclarationList).type;
       if (typeName != null && !isBuiltIn(typeName.name.name)) {
         ClassDeclaration node = classNameToDeclaration[typeName.name.name];
