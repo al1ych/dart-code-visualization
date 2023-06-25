@@ -17,8 +17,8 @@ String getLayoutHTML(List<String> filePaths) {
       .map((fp) => FileData(
             // filename: "${fp.split("/").last.split(".").first}.dart",
             filename: "${fp.split("/html/").last.split(".").first}.dart",
-            filePath:
-                '${Directory.current.path}/$fp', // filepath is for DartBoard (its path to build/ generated)
+            filePath: '${Directory.current.path}/$fp', // filepath is for DartBoard (its path to build/ generated)
+            // filePath: '${fp.split("/html/").last}', // filepath is for DartBoard (its path to build/ generated)
           ))
       .toList();
 

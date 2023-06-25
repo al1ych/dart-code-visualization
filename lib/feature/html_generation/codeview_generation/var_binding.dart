@@ -115,9 +115,9 @@ String _getUsageDescription(AstNode usage, int index) {
 
   final resultLines = lines.sublist(start, end);
   if (index != 0) {
-    resultLines.insert(0, "Usage #$index at line $lineNumber:");
+    resultLines.insert(0, "Usage #$index at line ${lineNumber + 1}:");
   } else {
-    resultLines.insert(0, "Declaration of $usage at line $lineNumber:");
+    resultLines.insert(0, "Declaration of $usage at line ${lineNumber + 1}:");
   }
 
   for (int i = 1; i < resultLines.length; i++) {

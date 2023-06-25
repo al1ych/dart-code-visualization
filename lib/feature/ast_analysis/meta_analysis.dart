@@ -46,16 +46,14 @@ class ToppersVisitor extends GeneralizingAstVisitor {
   @override
   void visitVariableDeclaration(VariableDeclaration node) {
     SimpleIdentifier id = node.name;
-    topLevelDeclarations[id.name] =
-        TopLevelDeclarationInfo(node: id, filePath: filePath);
+    topLevelDeclarations[id.name] = TopLevelDeclarationInfo(node: id, filePath: filePath);
     super.visitVariableDeclaration(node);
   }
 
   @override
   void visitFunctionDeclaration(FunctionDeclaration node) {
     SimpleIdentifier id = node.name;
-    topLevelDeclarations[id.name] =
-        TopLevelDeclarationInfo(node: id, filePath: filePath);
+    topLevelDeclarations[id.name] = TopLevelDeclarationInfo(node: id, filePath: filePath);
     super.visitFunctionDeclaration(node);
   }
 
@@ -63,14 +61,17 @@ class ToppersVisitor extends GeneralizingAstVisitor {
   @override
   void visitClassDeclaration(ClassDeclaration node) {
     SimpleIdentifier id = node.name;
-    topLevelDeclarations[id.name] =
-        TopLevelDeclarationInfo(node: id, filePath: filePath);
+    topLevelDeclarations[id.name] = TopLevelDeclarationInfo(node: id, filePath: filePath);
     super.visitClassDeclaration(node);
   }
 }
 
 startMetaAnalysis(AstNode root, String filePath) {
+  root.visitChildren(NameResolveAndContextStackVisitor());
   root.visitChildren(FilePathResolver(filePath));
   root.visitChildren(ToppersVisitor(filePath));
+  root.visitChildren(ClassNameToDeclarationVisitor());
+  root.visitChildren(ClassInfoVisitor());
+  root.visitChildren(DocumentationCommentVisitor());
   // print("toppers: ${topLevelDeclarations['performOperation']}");
 }

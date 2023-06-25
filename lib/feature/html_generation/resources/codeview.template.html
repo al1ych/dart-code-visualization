@@ -4,33 +4,44 @@
 
     /*  normalize */
     html {
-    line-height: 1.15; /* 1 */
-    -webkit-text-size-adjust: 100%; /* 2 */
+        line-height: 1.15;
+        /* 1 */
+        -webkit-text-size-adjust: 100%;
+        /* 2 */
     }
+
     pre {
-    overflow: auto;
+        overflow: auto;
     }
+
     a {
-    background-color: transparent;
+        background-color: transparent;
     }
+
     button,
     input,
     optgroup,
     select,
     textarea {
-    font-family: inherit; /* 1 */
-    font-size: 100%; /* 1 */
-    line-height: 1.15; /* 1 */
-    margin: 0; /* 2 */
+        font-family: inherit;
+        /* 1 */
+        font-size: 100%;
+        /* 1 */
+        line-height: 1.15;
+        /* 1 */
+        margin: 0;
+        /* 2 */
     }
+
     /* todo: span -> div, remove whitespacing at the end */
-    div {
-    }
+    div {}
+
     /* reset divs */
     div {
-    display: block;
-    margin: 0;
+        display: block;
+        margin: 0;
     }
+
     /* end normalize */
 
 
@@ -42,7 +53,7 @@
         margin-top: 10px;
         animation: fade-in 0.2s ease-in-out;
     }
-    
+
     body {
         background-color: white;
     }
@@ -51,12 +62,16 @@
         from {
             opacity: 0;
         }
+
         to {
             opacity: 1;
         }
     }
 
-    code, .tooltip, .usages-list-container, .code-line {
+    code,
+    .tooltip,
+    .usages-list-container,
+    .code-line {
         font-family: 'JetBrains Mono', 'Fira Code';
         font-size: 105%;
         line-height: 20px;
@@ -65,7 +80,7 @@
 
     .doc {
         /* background-color: #6a8e231e !important; */
-        color: rgba(90, 30, 64, 0.561);
+        color: rgba(90, 30, 64, 0.561) !important;
     }
 
     .block {
@@ -152,7 +167,7 @@
     /* .usages-list-container > * {
         color: white !important;
     } */
-    
+
     .var-pointer {
         cursor: pointer;
         color: white;
@@ -168,7 +183,7 @@
     }
 
     #original-code-section {
-        display: none; 
+        display: none;
     }
 </style>
 
@@ -213,10 +228,10 @@
             for (let m of matchPositions.reverse()) {
                 console.log("match", m);
                 // добавить на месте матча теги в code
-                codeSnapshot =  codeSnapshot.slice(0, m) +
-                        '<span class="search-match">' +
-                        codeSnapshot.slice(m, m + searchQuery.length) +
-                        '</span>' + codeSnapshot.slice(m + searchQuery.length);
+                codeSnapshot = codeSnapshot.slice(0, m) +
+                    '<span class="search-match">' +
+                    codeSnapshot.slice(m, m + searchQuery.length) +
+                    '</span>' + codeSnapshot.slice(m + searchQuery.length);
             }
 
             console.log("new code", codeSnapshot);
@@ -231,7 +246,7 @@
     let files = [];
     let thisFileUrl = "unknown";
 
-    window.addEventListener('message', function(event) {
+    window.addEventListener('message', function (event) {
         if (event.data.type == "files") {
             files = event.data.files;
             console.log("Received files from parent!", files);
@@ -358,7 +373,7 @@
         console.log("Hiding tooltip!");
     }
 
-    function createTooltip(){
+    function createTooltip() {
         let tooltip = document.createElement("div");
         tooltip.innerHTML = "<tooltip>";
         tooltip.classList.add("tooltip");
@@ -445,7 +460,8 @@
         display: flex;
     }
 
-    #line-numbers-half, #code-half {
+    #line-numbers-half,
+    #code-half {
         display: inline-block;
         overflow: hidden;
     }
@@ -460,13 +476,15 @@
 
         overflow: hidden;
         scrollbar-width: none;
-        -ms-overflow-style: none;;
+        -ms-overflow-style: none;
+        ;
     }
 
     pre {
         margin: 0;
         overflow: hidden;
     }
+
     code {
         margin: 0;
         overflow: hidden;
@@ -476,4 +494,4 @@
 <div id="code-container">
     <div id="line-numbers-half"></div>
     <div id="code-half">
-<!-- <pre><code>$codeString</code></pre> -->
+        <!-- <pre><code>$codeString</code></pre> -->

@@ -35,14 +35,13 @@ void _clearAnalysisState() {
 }
 
 void _connectUsageWithDeclaration(AstNode usage, AstNode decl) {
+  if (decl == null || usage == null) return;
   jumpToDeclaration[usage] = decl;
-  if (decl == null) return;
   if (jumpToUsages[getNodeSignature(decl)] == null) {
     jumpToUsages[getNodeSignature(decl)] = [];
   }
   jumpToUsages[getNodeSignature(decl)].add(usage);
-  print(
-      "Adding usage $usage to decl $decl: ${jumpToUsages[getNodeSignature(decl)]}");
+  print("Adding usage $usage to decl $decl: ${jumpToUsages[getNodeSignature(decl)]}");
 }
 
 // todo: change dynamic -> OR<AstNode, TopLevelDeclarationInfo>
@@ -68,6 +67,12 @@ dynamic _findDeclaration(SimpleIdentifier idNode) {
       }
     } else if (contextStack[i] is FunctionDeclaration) {
       FunctionDeclaration decl = contextStack[i]; // down-casting
+      SimpleIdentifier declId = decl.name;
+      if (declId.name == idNode.name) {
+        return declId;
+      }
+    } else if (contextStack[i] is MethodDeclaration) {
+      MethodDeclaration decl = contextStack[i]; // down-casting
       SimpleIdentifier declId = decl.name;
       if (declId.name == idNode.name) {
         return declId;
@@ -115,10 +120,11 @@ class NameResolveAndContextStackVisitor extends RecursiveAstVisitor {
     AstNode decl = _findDeclaration(node.methodName);
     print("usage ${node.methodName} found: $decl");
     print("> ${nodeFilePathBySignature[getNodeSignature(node.methodName)]}");
-    if (decl != null)
+    if (decl != null) {
       print("> ${nodeFilePathBySignature[getNodeSignature(decl)]}");
-    else
+    } else {
       print("> decl null");
+    }
     _connectUsageWithDeclaration(node.methodName, decl);
     super.visitMethodInvocation(node);
   }
@@ -138,6 +144,14 @@ class NameResolveAndContextStackVisitor extends RecursiveAstVisitor {
     contextStack.add(id);
     // print("added function declaration to context stack: $id");
     super.visitFunctionDeclaration(node);
+  }
+
+  @override
+  void visitMethodDeclaration(MethodDeclaration node) {
+    SimpleIdentifier id = node.name;
+    contextStack.add(id);
+    // print("added function declaration to context stack: $id");
+    super.visitMethodDeclaration(node);
   }
 
   /////////////////////////////
